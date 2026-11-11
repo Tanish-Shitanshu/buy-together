@@ -1,0 +1,137 @@
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import type { LangCode } from '../../shared/types';
+import { post } from './api';
+
+export const STR = {
+  'app.tag': 'Buy together. Pay safely.',
+  'top.viewing': 'You are',
+  'top.language': 'Language',
+  'top.next': 'Next step',
+  'top.run': 'Play whole demo',
+  'top.reset': 'Reset demo',
+  'top.step': 'Step {n} of {total}',
+  'mode.sandbox': 'PayPal sandbox',
+  'mode.simulated': 'Simulated holds',
+  'hero.together': '{n} cans together',
+  'hero.price': 'each',
+  'hero.market': 'market price {p}',
+  'hero.more': '{n} more cans unlock {p} each',
+  'hero.top': 'Top price reached',
+  'hero.empty': 'Nobody has joined yet',
+  'rate.title': 'Rate card',
+  'rate.from': '{n}+ cans',
+  'rate.market': 'Shop price today',
+  'join.title': 'Join this deal',
+  'join.qty': 'How many cans',
+  'join.max': 'Highest price you accept',
+  'join.hint': 'Your money is only held. It is spent only if everyone agrees.',
+  'join.hold': 'Hold {a} and join',
+  'join.paypal': 'Approve the hold in PayPal',
+  'join.in': 'You are in with {n} cans. {a} is held.',
+  'join.leave': 'Leave and release my hold',
+  'agent.start': 'Ask Munim to get the best price',
+  'agent.need': '{n} more cans before Munim can start',
+  'agent.auto': 'Munim may say yes for me when the price is within my limit',
+  'neg.title': 'Munim and the sellers',
+  'neg.quote': 'Quote received',
+  'neg.counter': 'Negotiating',
+  'neg.agreed': 'Agreed',
+  'neg.blocked': 'Blocked by Pause',
+  'neg.rejected': 'Not accepted',
+  'neg.each': 'each',
+  'neg.verified': 'Verified seller',
+  'neg.unverified': 'Not verified',
+  'review.title': '{s} offers {p} each',
+  'review.save': 'Market price is {m}. Together you save {t}.',
+  'review.pause': 'Pause check: {d}',
+  'review.approve': 'Yes, I agree',
+  'review.no': 'No, release my money',
+  'review.wait': 'Waiting',
+  'review.yes': 'Said yes',
+  'review.you': 'Your share',
+  'review.cost': '{q} cans at {p} = {a}',
+  'review.back': '{a} goes back to you',
+  'undo.title': 'Undo window',
+  'undo.hint': 'Everyone said yes. You can still pull out for {s} more seconds.',
+  'undo.btn': 'Undo my share',
+  'undo.pay': 'Pay now',
+  'undo.ready': 'Window closed. Ready to pay.',
+  'paid.title': 'Paid. Deal done.',
+  'paid.saved': 'You saved {t} together',
+  'paid.total': '{a} paid for {q} cans',
+  'paid.each': '{p} each instead of {m}',
+  'cancel.title': 'Deal cancelled. No money was spent.',
+  'book.title': 'Order book',
+  'book.buyer': 'Buyer',
+  'book.city': 'City',
+  'book.lang': 'Language',
+  'book.qty': 'Cans',
+  'book.limit': 'Highest price',
+  'book.held': 'Held',
+  'book.status': 'Status',
+  'stamp.held': 'Held',
+  'stamp.paid': 'Paid',
+  'stamp.returned': 'Returned',
+  'stamp.waiting': 'Waiting',
+  'chat.tab': 'Group chat',
+  'chat.ph': 'Write in your own language',
+  'chat.send': 'Send',
+  'chat.from': 'translated from {l}',
+  'chat.original': 'Show original',
+  'chat.empty': 'Say hello to the group. Everyone reads it in their own language.',
+  'ask.tab': 'Munim',
+  'ask.ph': 'Ask anything about this deal',
+  'ask.hi': 'Ask me in your language, by typing or by voice.',
+  'ask.q1': 'Where do we stand?',
+  'ask.q2': 'Is my money safe?',
+  'ask.q3': 'Why this price?',
+  'ask.mic': 'Speak',
+  'ask.listening': 'Listening',
+  'ask.speak': 'Read answers aloud',
+  'ask.do': 'Do it',
+  'pause.tab': 'Pause',
+  'pause.empty': 'Pause checks every offer before any money moves.',
+  'pause.clear': 'Clear',
+  'pause.warn': 'Be careful',
+  'pause.block': 'Blocked',
+  'pause.shared': 'Shared warning list',
+  'pause.groups': '{r} reports from {f} groups',
+  'pause.test': 'Paste a seller message to test it',
+  'pause.testbtn': 'Check message',
+  'time.tab': 'Timeline',
+  'time.empty': 'Nothing yet.',
+  'err.generic': 'Something went wrong',
+} as const;
+export type StrKey = keyof typeof STR;
+
+interface Ctx { lang: LangCode; setLang: (l: LangCode) => void; t: (k: StrKey, v?: Record<string, string | number>) => string }
+const C = createContext<Ctx>({ lang: 'en', setLang: () => {}, t: k => STR[k] });
+export const useT = () => useContext(C);
+
+export function I18nProvider({ children }: { children: ReactNode }) {
+  const [lang, setLang] = useState<LangCode>('en');
+  const [dict, setDict] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (lang === 'en') { setDict({}); return; }
+    const key = `bt-i18n-v1-${lang}`;
+    try { const c = localStorage.getItem(key); if (c) setDict(JSON.parse(c)); } catch { /* none */ }
+    let live = true;
+    post<Record<string, string>>('/api/i18n', { lang, strings: STR }).then(d => {
+      if (!live) return;
+      setDict(d);
+      try { localStorage.setItem(key, JSON.stringify(d)); } catch { /* full */ }
+    }).catch(() => { /* keep English */ });
+    return () => { live = false; };
+  }, [lang]);
+
+  const value = useMemo<Ctx>(() => ({
+    lang, setLang,
+    t: (k, v) => {
+      let s = (lang !== 'en' && dict[k]) || STR[k];
+      if (v) for (const [a, b] of Object.entries(v)) s = s.split(`{${a}}`).join(String(b));
+      return s;
+    },
+  }), [lang, dict]);
+  return <C.Provider value={value}>{children}</C.Provider>;
+}

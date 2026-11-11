@@ -19,17 +19,17 @@ const cents = (n: number) => Math.round(n * 100) / 100;
 export function openingQuote(deal: Deal, seller: Seller, qty: number): Quote {
   const p = PROFILES[seller.id];
   if (p?.kind === 'shady') {
-    const message = `Only today! ${qty} ${deal.product.unit}s at ${usd(0.38)} each, 100% genuine stock. Pay 50% advance to our personal UPI id now, no refunds. Offer ends in 1 hour, trust me.`;
+    const message = `Only today! ${qty.toLocaleString('en-US')} ${deal.product.unit}s at ${usd(0.38)} each, 100% genuine stock. Pay 50% advance to our personal UPI id now, no refunds. Offer ends in 1 hour, trust me.`;
     return { sellerId: seller.id, unitPrice: 0.38, qty, message, highlights: pressureSpans(message), status: 'received' };
   }
   const top = deal.tiers[deal.tiers.length - 1].unitPrice;
-  const message = `Hello. For ${qty} ${deal.product.unit}s we can supply at our top rate of ${usd(top)} each, delivered in 5 days. Payment through the held deal is fine.`;
+  const message = `Hello. For ${qty.toLocaleString('en-US')} ${deal.product.unit}s we can supply at our top rate of ${usd(top)} each, delivered in 5 days. Payment through the held deal is fine.`;
   return { sellerId: seller.id, unitPrice: top, qty, message, highlights: [], status: 'received' };
 }
 
 async function agentLine(kind: 'counter' | 'accept', price: number, seller: Seller, qty: number, unit: string): Promise<string> {
   const fallback = kind === 'counter'
-    ? `We are ${qty} buyers ordering ${qty.toLocaleString('en-US')} ${unit}s together. Can you do ${usd(price)} each?`
+    ? `We are a group of shop owners ordering ${qty.toLocaleString('en-US')} ${unit}s together. Can you do ${usd(price)} each?`
     : `Agreed at ${usd(price)} each for ${qty.toLocaleString('en-US')} ${unit}s, subject to every buyer's final yes.`;
   const out = await llm({
     fast: true,
