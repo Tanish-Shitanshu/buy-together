@@ -185,3 +185,7 @@ input[type=number], input[type=text], textarea { border: 1.5px solid var(--line)
 .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; }
 .totalrow { font-weight: 700; background: #F6F7FB; }
 .small { font-size: 13px; margin: 4px 0 0; }
+
+.invite { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 14px; border-radius: 12px; background: #fff; border: 1px dashed var(--line); font-size: 14px; }
+.invite span { flex: 1; min-width: 200px; }
+.invite a.btn { text-decoration: none; }

@@ -10,6 +10,7 @@ import { NewDeal } from './components/NewDeal';
 import { AgentRequests } from './components/AgentRequests';
 import { HelperView } from './components/HelperView';
 import { Delivery } from './components/Delivery';
+import { Invite } from './components/Invite';
 import type { LangCode } from '../../shared/types';
 
 export function App() {
@@ -18,7 +19,7 @@ export function App() {
   const [viewAs, setViewAs] = useState('b_ravi');
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
-  const [dealId, setDealId] = useState('');
+  const [dealId, setDealId] = useState(() => new URLSearchParams(location.search).get('deal') ?? '');
   const [showNew, setShowNew] = useState(false);
 
   // Follow the chosen buyer's language until the user picks one by hand.
@@ -73,6 +74,7 @@ export function App() {
         <main className="main">
           {showNew && <NewDeal state={state} viewAs={viewAs} act={act} onCreated={id => { setDealId(id); setShowNew(false); }} />}
           <Hero state={state} deal={deal} />
+          {deal.status === 'open' && <Invite deal={deal} />}
           {err && <div className="err" role="alert">{err}</div>}
           <AgentRequests state={state} viewAs={viewAs} dealId={deal.id} act={act} />
           {deal.status === 'open' && <div id="join-panel"><JoinPanel state={state} deal={deal} viewAs={viewAs} act={act} /></div>}
