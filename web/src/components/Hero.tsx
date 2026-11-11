@@ -15,7 +15,9 @@ export function Hero({ state, deal }: { state: AppState; deal: Deal }) {
   const total = counted.reduce((a, c) => a + c.qty, 0);
   const tier = tierFor(deal, total);
   const next = deal.tiers.find(x => x.minQty > total);
-  const scale = Math.max(1200, Math.ceil((total * 1.08) / 100) * 100);
+  const unitS = deal.product.unit + 's';
+  const step = Math.max(1, Math.pow(10, Math.floor(Math.log10(Math.max(10, deal.targetQty))) - 1));
+  const scale = Math.max(Math.ceil((deal.targetQty * 1.2) / step) * step, Math.ceil((total * 1.08) / step) * step);
   const price = deal.finalUnitPrice ?? tier.unitPrice;
   const buyerOf = (id: string) => state.buyers.find(b => b.id === id)!;
 
@@ -27,10 +29,10 @@ export function Hero({ state, deal }: { state: AppState; deal: Deal }) {
           <div className="num price-big">{total ? usd(price) : usd(deal.tiers[0].unitPrice)}<small>{t('hero.price')}</small></div>
         </div>
         <div className="hero-meta">
-          <div className="big">{t('hero.together', { n: num(total) })}</div>
+          <div className="big">{t('hero.together', { n: num(total), u: unitS })}</div>
           <div className="strike">{t('hero.market', { p: usd(deal.marketPrice) })}</div>
           <div style={{ fontWeight: 600, color: next ? 'var(--indigo)' : 'var(--leaf)' }}>
-            {total === 0 ? t('hero.empty') : next ? t('hero.more', { n: num(next.minQty - total), p: usd(next.unitPrice) }) : t('hero.top')}
+            {total === 0 ? t('hero.empty') : next ? t('hero.more', { n: num(next.minQty - total), p: usd(next.unitPrice), u: unitS }) : t('hero.top')}
           </div>
         </div>
       </div>
@@ -60,7 +62,7 @@ export function Hero({ state, deal }: { state: AppState; deal: Deal }) {
         {deal.tiers.map(x => (
           <div key={x.minQty} className={tier.minQty === x.minQty && total > 0 ? 'on' : ''}>
             <span className="num p">{usd(x.unitPrice)}</span>
-            <span className="m">{t('rate.from', { n: num(x.minQty) })}</span>
+            <span className="m">{t('rate.from', { n: num(x.minQty), u: unitS })}</span>
           </div>
         ))}
         <div className="mkt"><span className="num p strike">{usd(deal.marketPrice)}</span><span className="m">{t('rate.market')}</span></div>

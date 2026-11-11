@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import type { AppState, AssistantReply, ChatMessage, Deal } from '../../../shared/types';
 import { useT } from '../i18n';
 import { post } from '../api';
-import { speak, useListen } from './voice';
+import { speak, stopSpeaking, useListen } from './voice';
 import { Checks } from './Stage';
 
 type Act = (fn: () => Promise<unknown>) => Promise<void>;
 
-function Mic({ speechLang, onText }: { speechLang: string; onText: (t: string) => void }) {
+function Mic({ lang, speechLang, server, onText }: { lang: string; speechLang: string; server: boolean; onText: (t: string) => void }) {
   const { t } = useT();
-  const { on, supported, start, stop } = useListen(speechLang);
+  const { on, supported, start, stop } = useListen(lang, speechLang, server);
   if (!supported) return null;
   return (
     <button className={`mic${on ? ' on' : ''}`} aria-label={on ? t('ask.listening') : t('ask.mic')} title={on ? t('ask.listening') : t('ask.mic')}
@@ -65,7 +65,7 @@ function Chat({ state, deal, viewAs, lang, act }: { state: AppState; deal: Deal;
       </div>
       <div className="composer">
         <input type="text" value={text} placeholder={t('chat.ph')} onChange={e => setText(e.target.value)} onKeyDown={e => e.key === 'Enter' && send()} lang={me.lang} />
-        <Mic speechLang={speech} onText={setText} />
+        <Mic lang={me.lang} speechLang={speech} server={state.config.aiMode === 'live'} onText={setText} />
         <button className="btn sm" onClick={send}>{t('chat.send')}</button>
       </div>
     </>
@@ -94,7 +94,7 @@ function Assistant({ state, deal, viewAs, lang, act }: { state: AppState; deal: 
     try {
       const r = await post<AssistantReply>('/api/assistant', { dealId: deal.id, buyerId: viewAs, text: v, lang });
       setTurns(x => [...x, { who: 'bot', text: r.reply, suggest: r.suggest }]);
-      if (aloud) speak(r.reply, state.config.languages.find(z => z.code === r.lang)?.speech ?? speech);
+      if (aloud) speak(r.reply, r.lang, state.config.languages.find(z => z.code === r.lang)?.speech ?? speech, state.config.aiMode === 'live');
     } catch (e) {
       setTurns(x => [...x, { who: 'bot', text: (e as Error).message }]);
     } finally { setBusy(false); }
@@ -125,11 +125,11 @@ function Assistant({ state, deal, viewAs, lang, act }: { state: AppState; deal: 
       </div>
       <div className="composer">
         <input type="text" value={text} placeholder={t('ask.ph')} onChange={e => setText(e.target.value)} onKeyDown={e => e.key === 'Enter' && ask(text)} lang={lang} />
-        <Mic speechLang={speech} onText={v => { setText(v); }} />
+        <Mic lang={lang} speechLang={speech} server={state.config.aiMode === 'live'} onText={v => { setText(v); }} />
         <button className="btn sm" disabled={busy} onClick={() => ask(text)}>{t('chat.send')}</button>
       </div>
       <label className="row" style={{ padding: '0 14px 10px', gap: 8, fontSize: 13 }}>
-        <input type="checkbox" checked={aloud} onChange={e => { setAloud(e.target.checked); if (!e.target.checked) window.speechSynthesis?.cancel(); }} />{t('ask.speak')}
+        <input type="checkbox" checked={aloud} onChange={e => { setAloud(e.target.checked); if (!e.target.checked) stopSpeaking(); }} />{t('ask.speak')}
       </label>
     </>
   );

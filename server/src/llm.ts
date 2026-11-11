@@ -13,10 +13,25 @@ export async function llm(req: Req): Promise<string | null> {
   const hit = cache.get(key);
   if (hit) return hit;
   const ctl = new AbortController();
-  const timer = setTimeout(() => ctl.abort(), 20000);
+  const timer = setTimeout(() => ctl.abort(), 30000);
   try {
     let out: string | null = null;
-    if (provider === 'anthropic') {
+    if (provider === 'sarvam') {
+      const r = await fetch('https://api.sarvam.ai/v1/chat/completions', {
+        method: 'POST',
+        signal: ctl.signal,
+        headers: { 'content-type': 'application/json', 'api-subscription-key': config.ai.sarvamKey, authorization: `Bearer ${config.ai.sarvamKey}` },
+        body: JSON.stringify({
+          model: config.ai.sarvamModel,
+          max_tokens: req.maxTokens ?? 600,
+          temperature: 0.2,
+          messages: [{ role: 'system', content: req.system }, { role: 'user', content: req.user }],
+        }),
+      });
+      if (!r.ok) throw new Error(`sarvam ${r.status} ${await r.text()}`);
+      const j: any = await r.json();
+      out = (j.choices?.[0]?.message?.content ?? null)?.replace(/<think>[\s\S]*?<\/think>/g, '').trim() || null;
+    } else if (provider === 'anthropic') {
       const r = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         signal: ctl.signal,

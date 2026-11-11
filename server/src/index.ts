@@ -4,11 +4,13 @@ import path from 'node:path';
 import { config, LANGUAGES } from './config';
 import * as engine from './engine';
 import { UserError } from './engine';
-import { store, snapshot, subscribe, commit, resetStore, getDeal, getBuyer, DEAL_ID } from './store';
+import { searchMarket } from './market';
+import { createDeal, store, snapshot, subscribe, commit, resetStore, getDeal, getBuyer, DEAL_ID } from './store';
 import { postMessage, translateStrings, isLang } from './chat';
 import { ask } from './assistant';
 import { storyStep, storyRun, storyBusy } from './story';
 import { verifyWebhook } from './paypal';
+import { speechToText, textToSpeech } from './sarvam';
 import { runPause, pressureSpans } from './pause';
 
 const app = express();
@@ -39,6 +41,28 @@ app.get('/api/events', (req, res) => {
 });
 
 app.post('/api/reset', wrap(async (_req, res) => { resetStore(); res.json({ ok: true }); }));
+
+app.get('/api/market/search', wrap(async (req, res) => {
+  const q = String(req.query.q ?? '').trim();
+  if (q.length < 2) throw new UserError('Type a product name');
+  try { res.json({ items: await searchMarket(q) }); }
+  catch (e) { throw new UserError('Price lookup is not available right now', 502); }
+}));
+
+app.post('/api/deals', wrap(async (req, res) => {
+  const b = req.body ?? {};
+  const name = String(b.productName ?? '').trim().slice(0, 60);
+  const pack = String(b.pack ?? '').trim().slice(0, 40) || 'each';
+  const unit = String(b.unit ?? '').trim().slice(0, 16).replace(/s$/i, '') || 'unit';
+  const market = Number(b.marketPrice);
+  const target = Math.round(Number(b.targetQty));
+  if (name.length < 2) throw new UserError('Name the product');
+  if (!(market >= 0.2 && market <= 100000)) throw new UserError('Enter the usual shop price (at least 0.20)');
+  if (!(target >= 10 && target <= 1_000_000)) throw new UserError('Target quantity must be between 10 and 1,000,000');
+  const deal = createDeal({ productName: name, pack, unit, marketPrice: market, targetQty: target, createdBy: b.buyerId, marketSource: b.marketSource });
+  commit();
+  res.json(deal);
+}));
 
 app.post('/api/deals/:id/join', wrap(async (req, res) => {
   const { buyerId, qty, maxUnitPrice, interactive } = req.body ?? {};
@@ -89,6 +113,21 @@ app.post('/api/i18n', wrap(async (req, res) => {
 app.post('/api/pause/check-message', wrap(async (req, res) => {
   const text = String(req.body?.text ?? '').slice(0, 1000);
   res.json({ highlights: pressureSpans(text) });
+}));
+
+app.post('/api/stt', express.raw({ type: () => true, limit: '8mb' }), wrap(async (req, res) => {
+  const buf = req.body as Buffer;
+  if (!Buffer.isBuffer(buf) || buf.length < 500) throw new UserError('No audio received');
+  const r = await speechToText(buf, String(req.headers['content-type'] ?? 'audio/webm'), String(req.query.lang ?? 'auto'));
+  if (!r) throw new UserError('Could not hear that. Please try again.', 502);
+  res.json(r);
+}));
+app.post('/api/tts', wrap(async (req, res) => {
+  const text = String(req.body?.text ?? '').trim();
+  if (!text) throw new UserError('Nothing to read');
+  const audio = await textToSpeech(text, String(req.body?.lang ?? 'en'));
+  if (!audio) throw new UserError('Voice is not available right now', 502);
+  res.json({ audio });
 }));
 
 app.post('/api/demo/step', wrap(async (_req, res) => {

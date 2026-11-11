@@ -3,7 +3,7 @@ import { config } from './config';
 import * as pp from './paypal';
 import { runPause, reportSeller } from './pause';
 import { negotiate, openingQuote } from './negotiation';
-import { checkMarketPrice } from './market';
+import { marketMedian } from './market';
 import {
   store, commit, addEvent, getDeal, getBuyer, getSeller, heldCommitments, heldQty, tierFor, uid, r2, sleep,
 } from './store';
@@ -149,9 +149,11 @@ export async function negotiateDeal(dealId: string) {
   const total = heldQty(dealId);
   if (total < deal.targetQty) throw new UserError(`The group has ${total} of ${deal.targetQty} ${deal.product.unit}s. The agent starts at ${deal.targetQty}.`);
 
-  const mk = await checkMarketPrice(deal.product.name, deal.marketPrice);
-  deal.marketPrice = mk.price;
-  deal.marketSource = mk.source;
+  const mk = await marketMedian(`${deal.product.name} ${deal.product.pack}`);
+  if (mk) {
+    deal.marketCheck = { source: 'channel3', median: mk.median, count: mk.count };
+    addEvent(dealId, 'market', `Channel3 cross-check: ${mk.count} shop listings, middle price ${usd(mk.median)}. Pause compares offers with ${usd(deal.marketPrice)}.`);
+  }
 
   const ceiling = Math.min(...held.map(c => c.maxUnitPrice));
   deal.status = 'negotiating';

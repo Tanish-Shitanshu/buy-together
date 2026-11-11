@@ -71,7 +71,7 @@ export function JoinPanel({ state, deal, viewAs, act }: { state: AppState; deal:
       {!me ? (
         <>
           <div className="grid2">
-            <label className="f">{t('join.qty')}<input type="number" min={1} value={qty} onChange={e => setQty(Number(e.target.value))} /></label>
+            <label className="f">{t('join.qty', { u: deal.product.unit + 's' })}<input type="number" min={1} value={qty} onChange={e => setQty(Number(e.target.value))} /></label>
             <label className="f">{t('join.max')}<input type="number" step="0.01" min={0.01} value={max} onChange={e => setMax(Number(e.target.value))} /></label>
           </div>
           <p className="muted" style={{ margin: '10px 0' }}>{t('join.hint')}</p>
@@ -83,7 +83,7 @@ export function JoinPanel({ state, deal, viewAs, act }: { state: AppState; deal:
         <PayPalBlock commitment={me} clientId={state.config.paypalClientId} act={act} />
       ) : (
         <>
-          <p style={{ fontWeight: 600 }}>{t('join.in', { n: num(me.qty), a: usd0(me.hold?.authorized ?? 0) })}</p>
+          <p style={{ fontWeight: 600 }}>{t('join.in', { u: deal.product.unit + 's', n: num(me.qty), a: usd0(me.hold?.authorized ?? 0) })}</p>
           <div className="row">
             <label className="row" style={{ gap: 8 }}>
               <input type="checkbox" checked={buyer.autonomy === 'auto'} onChange={e => act(() => post(`/api/buyers/${buyer.id}/autonomy`, { autonomy: e.target.checked ? 'auto' : 'ask' }))} />
@@ -94,7 +94,7 @@ export function JoinPanel({ state, deal, viewAs, act }: { state: AppState; deal:
             {total >= deal.targetQty ? (
               <button className="btn saffron" onClick={() => act(() => post(`/api/deals/${deal.id}/negotiate`))}>{t('agent.start')}</button>
             ) : (
-              <span className="stamp waiting">{t('agent.need', { n: num(deal.targetQty - total) })}</span>
+              <span className="stamp waiting">{t('agent.need', { u: deal.product.unit + 's', n: num(deal.targetQty - total) })}</span>
             )}
             <button className="btn ghost sm" onClick={() => act(() => post(`/api/commitments/${me.id}/withdraw`))}>{t('join.leave')}</button>
           </div>
@@ -200,7 +200,7 @@ export function Review({ state, deal, viewAs, act }: { state: AppState; deal: De
           return (
             <div key={c.id} className="chit" style={{ ['--c' as any]: b.color }}>
               <h3><span>{b.name}{b.id === viewAs ? ` (${t('review.you')})` : ''}</span><span className={`stamp ${c.approval === 'yes' ? 'yes' : 'waiting'}`}>{c.approval === 'yes' ? t('review.yes') : t('review.wait')}</span></h3>
-              <div className="calc">{t('review.cost', { q: num(c.qty), p: usd(price), a: usd0(amt) })}</div>
+              <div className="calc">{t('review.cost', { u: deal.product.unit + 's', q: num(c.qty), p: usd(price), a: usd0(amt) })}</div>
               <div className="num amt">{usd0(amt)}</div>
               <div className="back">{t('review.back', { a: usd0(back) })}</div>
               {b.id === viewAs && c.approval === 'pending' && (
@@ -237,7 +237,7 @@ export function Receipt({ state, deal }: { state: AppState; deal: Deal }) {
     <section className="card receipt">
       <h2 style={{ marginBottom: 6 }}>{t('paid.title')}</h2>
       <div className="num save">{t('paid.saved', { t: usd0(s.savedTotal) })}</div>
-      <p className="muted">{t('paid.total', { a: usd0(s.paidTotal), q: num(s.totalQty) })}. {t('paid.each', { p: usd(s.finalPrice), m: usd(deal.marketPrice) })}</p>
+      <p className="muted">{t('paid.total', { u: deal.product.unit + 's', a: usd0(s.paidTotal), q: num(s.totalQty) })}. {t('paid.each', { p: usd(s.finalPrice), m: usd(deal.marketPrice) })}</p>
       <div className="grid2" style={{ textAlign: 'left', marginTop: 12 }}>
         {paid.map(c => {
           const b = state.buyers.find(x => x.id === c.buyerId)!;

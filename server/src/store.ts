@@ -160,3 +160,25 @@ export const languagesInDeal = (dealId: string): LangCode[] => {
   }
   return [...set];
 };
+
+export function createDeal(p: { productName: string; pack: string; unit: string; marketPrice: number; targetQty: number; createdBy?: string; marketSource?: string }): Deal {
+  const base = r2(p.marketPrice * 0.905);
+  const at = (f: number) => Math.max(1, Math.round(p.targetQty * f));
+  const tiers = [
+    { minQty: 1, unitPrice: base },
+    { minQty: at(0.3), unitPrice: r2(p.marketPrice * 0.81) },
+    { minQty: at(0.6), unitPrice: r2(p.marketPrice * 0.743) },
+    { minQty: p.targetQty, unitPrice: r2(p.marketPrice * 0.667) },
+  ];
+  const deal: Deal = {
+    id: uid('deal'),
+    title: `${p.productName}, ${p.pack}`,
+    product: { name: p.productName, pack: p.pack, unit: p.unit },
+    tiers, marketPrice: r2(p.marketPrice), marketSource: p.marketSource ?? 'entered by buyer',
+    targetQty: p.targetQty, deadline: Date.now() + 2 * DAY, status: 'open',
+    sellerIds: store.sellers.map(s => s.id), quotes: [], rounds: [], pause: {}, createdBy: p.createdBy,
+  };
+  store.deals.push(deal);
+  addEvent(deal.id, 'create', `New deal: ${deal.title}. Agent starts at ${p.targetQty} ${p.unit}s.`, 'good');
+  return deal;
+}

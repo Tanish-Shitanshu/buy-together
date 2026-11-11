@@ -6,12 +6,15 @@ import type { Deal, Quote, Round, Seller } from '../../shared/types';
 /** Negotiation is plain arithmetic. The model only phrases the agent's lines, and a phrased line
  *  is used only if it still contains the exact price. Prices never come from a model. */
 
-export interface SellerProfile { kind: 'honest' | 'shady'; floor: number }
+/** Seller behaviour scales with the product's price, so any product can be a deal.
+ *  Honest: sells at the top tier and will not go below `floorOfTop` of it. Shady: quotes a fraction of market. */
+export interface SellerProfile { kind: 'honest' | 'shady'; floorOfTop: number; quoteOfMarket: number }
 
 export const PROFILES: Record<string, SellerProfile> = {
-  seller_metro: { kind: 'honest', floor: 0.64 },
-  seller_fast: { kind: 'shady', floor: 0.38 },
+  seller_metro: { kind: 'honest', floorOfTop: 0.914, quoteOfMarket: 0 },
+  seller_fast: { kind: 'shady', floorOfTop: 0, quoteOfMarket: 0.36 },
 };
+const floorFor = (deal: Deal, id: string) => cents(deal.tiers[deal.tiers.length - 1].unitPrice * (PROFILES[id]?.floorOfTop ?? 1));
 
 const usd = (n: number) => `$${n.toFixed(2)}`;
 const cents = (n: number) => Math.round(n * 100) / 100;
@@ -19,8 +22,9 @@ const cents = (n: number) => Math.round(n * 100) / 100;
 export function openingQuote(deal: Deal, seller: Seller, qty: number): Quote {
   const p = PROFILES[seller.id];
   if (p?.kind === 'shady') {
-    const message = `Only today! ${qty.toLocaleString('en-US')} ${deal.product.unit}s at ${usd(0.38)} each, 100% genuine stock. Pay 50% advance to our personal UPI id now, no refunds. Offer ends in 1 hour, trust me.`;
-    return { sellerId: seller.id, unitPrice: 0.38, qty, message, highlights: pressureSpans(message), status: 'received' };
+    const shady = cents(deal.marketPrice * p.quoteOfMarket);
+    const message = `Only today! ${qty.toLocaleString('en-US')} ${deal.product.unit}s at ${usd(shady)} each, 100% genuine stock. Pay 50% advance to our personal UPI id now, no refunds. Offer ends in 1 hour, trust me.`;
+    return { sellerId: seller.id, unitPrice: shady, qty, message, highlights: pressureSpans(message), status: 'received' };
   }
   const top = deal.tiers[deal.tiers.length - 1].unitPrice;
   const message = `Hello. For ${qty.toLocaleString('en-US')} ${deal.product.unit}s we can supply at our top rate of ${usd(top)} each, delivered in 5 days. Payment through the held deal is fine.`;
@@ -62,7 +66,7 @@ export async function negotiate(deal: Deal, seller: Seller, qty: number, ceiling
   for (let i = 0; i < 4; i++) {
     if (ask - bid <= 0.02 + 1e-9) break;
     await push('agent', bid, await agentLine('counter', bid, seller, qty, deal.product.unit));
-    const next = cents(Math.max(profile?.floor ?? ask, ask - (ask - bid) * 0.5));
+    const next = cents(Math.max(profile ? floorFor(deal, seller.id) : ask, ask - (ask - bid) * 0.5));
     if (next < ask) {
       ask = next;
       await push('seller', ask, `We can come down to ${usd(ask)} each for ${qty.toLocaleString('en-US')} ${deal.product.unit}s.`);

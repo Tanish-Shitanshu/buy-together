@@ -111,6 +111,8 @@ export interface Deal {
   tiers: Tier[];                // the public rate card
   marketPrice: number;          // retail benchmark per unit
   marketSource: string;
+  marketCheck?: { source: 'channel3'; median: number; count: number };
+  createdBy?: string;
   targetQty: number;
   deadline: number;
   status: DealStatus;
@@ -133,6 +135,8 @@ export interface ScamEntry {
   firstSeen: number;
   expiresAt: number;
 }
+
+export interface MarketItem { title: string; brand?: string; merchant?: string; price: number; image?: string; url?: string }
 
 export interface PublicConfig {
   paypalMode: 'sandbox' | 'simulated';

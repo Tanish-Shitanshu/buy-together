@@ -161,3 +161,9 @@ input[type=number], input[type=text], textarea { border: 1.5px solid var(--line)
   .side .panel { height: 440px; flex: none; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+.newdeal .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin-top: 8px; }
+.found-row { display: grid; grid-template-columns: 44px 1fr auto auto; gap: 10px; align-items: center; padding: 6px 0; border-top: 1px solid var(--line); }
+.found-row img, .found-row .ph { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; background: var(--line); }
+.found-row .ttl { display: flex; flex-direction: column; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
+.found-row .ttl small { color: var(--muted, #667); font-size: 12px; }

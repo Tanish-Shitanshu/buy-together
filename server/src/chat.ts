@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { config, langName, LANGUAGES } from './config';
 import { llmJson } from './llm';
+import { sarvamOn, translateText } from './sarvam';
 import { addMessage, languagesInDeal, store } from './store';
 import type { ChatMessage, LangCode } from '../../shared/types';
 
@@ -23,6 +24,16 @@ const RULES = 'Translate for small shop owners who may not read much. Short, spo
 export async function translateMany(text: string, from: LangCode, targets: LangCode[]): Promise<Partial<Record<LangCode, string>>> {
   const want = targets.filter(t => t !== from);
   if (!want.length || !text.trim()) return {};
+  if (sarvamOn()) {
+    // One call per distinct Sarvam language. Haryanvi and Hindi share hi-IN.
+    const codeOf = (l: LangCode) => (l === 'bgc' ? 'hi' : l);
+    const uniq = [...new Set(want.map(codeOf))];
+    const got = await Promise.all(uniq.map(async u => [u, await translateText(text, from, u)] as const));
+    const byCode = new Map(got);
+    const res: Partial<Record<LangCode, string>> = {};
+    for (const t of want) { const v = byCode.get(codeOf(t)); if (v) res[t] = v; }
+    return res;
+  }
   const spec = want.map(t => `"${t}": ${STYLE[t] ?? langName(t)}`).join('\n');
   const out = await llmJson<Record<string, string>>({
     fast: true,
@@ -62,6 +73,28 @@ export async function translateStrings(lang: LangCode, strings: Record<string, s
   if (lang === 'en') return strings;
   const have = (cache[lang] ??= {});
   const missing = Object.entries(strings).filter(([k, v]) => have[`${k}|${v}`] === undefined);
+  if (sarvamOn()) {
+    // Placeholders like {n} become numbers the translator leaves alone, then are put back. If any is lost, keep English.
+    const todo = [...missing];
+    const worker = async () => {
+      for (let it = todo.pop(); it; it = todo.pop()) {
+        const [k, v] = it;
+        const holders: string[] = [];
+        const masked = v.replace(/\{(\w+)\}/g, (_m, name) => { holders.push(name); return String(7000 + holders.length); });
+        const out = await translateText(masked, 'en', lang === 'bgc' ? 'hi' : lang);
+        if (!out) continue;
+        let back = out;
+        let ok = true;
+        holders.forEach((name, i) => { const tok = String(7001 + i); if (!back.includes(tok)) ok = false; back = back.split(tok).join(`{${name}}`); });
+        if (ok) have[`${k}|${v}`] = back;
+      }
+    };
+    await Promise.all(Array.from({ length: 8 }, worker));
+    if (missing.length) saveCache();
+    const res: Record<string, string> = {};
+    for (const [k, v] of Object.entries(strings)) res[k] = have[`${k}|${v}`] ?? v;
+    return res;
+  }
   const BATCH = 40;
   for (let i = 0; i < missing.length; i += BATCH) {
     const part = Object.fromEntries(missing.slice(i, i + BATCH));

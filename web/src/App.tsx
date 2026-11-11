@@ -5,6 +5,7 @@ import { Hero } from './components/Hero';
 import { OrderBook } from './components/OrderBook';
 import { JoinPanel, Negotiation, Receipt, Review } from './components/Stage';
 import { BottomPanel, TopPanel } from './components/SidePanels';
+import { NewDeal } from './components/NewDeal';
 import type { LangCode } from '../../shared/types';
 
 export function App() {
@@ -13,6 +14,8 @@ export function App() {
   const [viewAs, setViewAs] = useState('b_ravi');
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
+  const [dealId, setDealId] = useState('');
+  const [showNew, setShowNew] = useState(false);
 
   // Follow the chosen buyer's language until the user picks one by hand.
   const [manual, setManual] = useState(false);
@@ -29,7 +32,7 @@ export function App() {
   const director = async (fn: () => Promise<unknown>) => { setBusy(true); await act(fn); setBusy(false); };
 
   if (!state) return <div className="app"><div className="bar"><span className="brand">Buy Together</span><span className="tag">{online ? '…' : 'Connecting'}</span></div></div>;
-  const deal = state.deals[0];
+  const deal = state.deals.find(d => d.id === dealId) ?? state.deals[0];
 
   return (
     <div className="app">
@@ -38,6 +41,12 @@ export function App() {
         <span className="tag">{t('app.tag')}</span>
         <span className="sp" />
         <span className={`pill${state.config.paypalMode === 'sandbox' ? ' live' : ''}`}>{state.config.paypalMode === 'sandbox' ? t('mode.sandbox') : t('mode.simulated')}</span>
+        <label>{t('deal.pick')}
+          <select value={deal.id} onChange={e => { setDealId(e.target.value); setShowNew(false); }}>
+            {state.deals.map(d => <option key={d.id} value={d.id}>{d.title}</option>)}
+          </select>
+        </label>
+        <button className="btn" onClick={() => setShowNew(v => !v)}>{t('new.open')}</button>
         <label>{t('top.viewing')}
           <select value={viewAs} onChange={e => { setViewAs(e.target.value); setManual(false); }}>
             {state.buyers.map(b => <option key={b.id} value={b.id}>{b.name}, {b.city}</option>)}
@@ -56,6 +65,7 @@ export function App() {
 
       <div className="layout">
         <main className="main">
+          {showNew && <NewDeal state={state} viewAs={viewAs} act={act} onCreated={id => { setDealId(id); setShowNew(false); }} />}
           <Hero state={state} deal={deal} />
           {err && <div className="err" role="alert">{err}</div>}
           {deal.status === 'open' && <div id="join-panel"><JoinPanel state={state} deal={deal} viewAs={viewAs} act={act} /></div>}

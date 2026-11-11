@@ -54,7 +54,7 @@ test('agent will not start below the target and never exceeds the lowest limit',
   const r = await negotiate(deal, getSeller('seller_metro')!, 1530, 0.60, () => {});
   assert.equal(r.agreed, null); // floor 0.64 is above the group's limit
   for (const x of r.rounds.filter(x => x.by === 'agent')) assert.ok(x.unitPrice <= 0.60 + 1e-9);
-  assert.equal(PROFILES.seller_metro.floor, 0.64);
+  assert.equal(PROFILES.seller_metro.floorOfTop, 0.914);
 });
 
 test('pause: pressure wording is found', () => {

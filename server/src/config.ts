@@ -23,6 +23,8 @@ export const config = {
     get base() { return this.env === 'live' ? 'https://api-m.paypal.com' : 'https://api-m.sandbox.paypal.com'; },
   },
   ai: {
+    sarvamKey: env('SARVAM_API_KEY'),
+    sarvamModel: env('SARVAM_MODEL', 'sarvam-105b'),
     anthropicKey: env('ANTHROPIC_API_KEY'),
     anthropicModel: env('ANTHROPIC_MODEL', 'claude-sonnet-5-5'),
     anthropicFast: env('ANTHROPIC_FAST_MODEL', 'claude-haiku-5-5'),
@@ -52,4 +54,9 @@ export const LANGUAGES: Language[] = [
 
 export const langName = (code: string) => LANGUAGES.find(l => l.code === code)?.name ?? code;
 
-export const aiProvider = () => (config.ai.anthropicKey ? 'anthropic' : config.ai.openaiKey ? 'openai' : null);
+export const aiProvider = () => (config.ai.sarvamKey ? 'sarvam' : config.ai.anthropicKey ? 'anthropic' : config.ai.openaiKey ? 'openai' : null);
+
+/** BCP-47 codes Sarvam understands. Haryanvi is sent as Hindi. */
+export const SARVAM_CODE: Record<string, string> = {
+  en: 'en-IN', hi: 'hi-IN', bgc: 'hi-IN', ta: 'ta-IN', te: 'te-IN', bn: 'bn-IN', mr: 'mr-IN', gu: 'gu-IN', pa: 'pa-IN', kn: 'kn-IN',
+};
