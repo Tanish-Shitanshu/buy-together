@@ -1,0 +1,8 @@
+node_modules
+dist
+.env
+.env.local
+data/state.json
+data/i18n-cache.json
+*.log
+.DS_Store
