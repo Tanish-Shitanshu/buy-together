@@ -391,7 +391,7 @@ export function planDelivery(deal: Deal): DeliverySlot[] {
     .sort((x, y) => x.b.city.localeCompare(y.b.city) || x.b.name.localeCompare(y.b.name));
   let t = 0;
   return held.map(({ c }) => {
-    const len = Math.min(120, Math.max(30, Math.round((20 + c.qty / 12) / 5) * 5));
+    const len = Math.min(120, Math.max(45, Math.round((25 + c.qty / 12) / 5) * 5));
     const slot = { buyerId: c.buyerId, startMin: t, endMin: t + len };
     t += len + 15;
     return slot;

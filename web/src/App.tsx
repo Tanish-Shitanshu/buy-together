@@ -8,6 +8,7 @@ import { BottomPanel, TopPanel } from './components/SidePanels';
 import { NewDeal } from './components/NewDeal';
 import { AgentRequests } from './components/AgentRequests';
 import { HelperView } from './components/HelperView';
+import { Delivery } from './components/Delivery';
 import type { LangCode } from '../../shared/types';
 
 export function App() {
@@ -75,6 +76,7 @@ export function App() {
           <AgentRequests state={state} viewAs={viewAs} dealId={deal.id} act={act} />
           {deal.status === 'open' && <div id="join-panel"><JoinPanel state={state} deal={deal} viewAs={viewAs} act={act} /></div>}
           {deal.status === 'review' && <Review state={state} deal={deal} viewAs={viewAs} act={act} />}
+          {(deal.status === 'review' || deal.status === 'paid') && deal.delivery && <Delivery key={deal.id + deal.status} state={state} deal={deal} act={act} />}
           {deal.status === 'paid' && deal.summary && <Receipt state={state} deal={deal} viewAs={viewAs} />}
           {deal.status === 'cancelled' && <section className="card"><h2>{t('cancel.title')}</h2></section>}
           {deal.quotes.length > 0 && <Negotiation state={state} deal={deal} />}
