@@ -17,8 +17,9 @@ Rule for the code: models read, write and translate. Plain code decides every pr
 ## Features
 - Ten languages in the app, group chat (messages translated for each reader), assistant, voice in and out.
 - Start a deal for any product. Channel3 shows real shop prices to set the usual price.
-- Live order book (AG Grid) with stamps for each hold.
+- Live order book and PayPal ledger (AG Grid): every hold, what was spent and what was returned, with totals and search.
 - Delivery day board (Bryntum Scheduler).
+- Invite link for other shops (WhatsApp or copy).
 - Family helper approval through a link.
 - Shared warning list across buying groups.
 - MCP server at `/mcp` for other agents.
