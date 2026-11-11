@@ -40,12 +40,14 @@ Orders v2 `intent=AUTHORIZE` per buyer, then Payments v2 capture (partial amount
 ## Pause evaluation
 Labelled seller messages are in `server/eval` (`dev`, `test`, `holdout`). Run the wording rules with `cd server && npx tsx eval/run.ts holdout.json`. The live app also exposes `/api/pause/eval?set=holdout&model=1` to include the model layer.
 
-On `holdout.json` (80 messages: 40 risky, 40 ordinary, written after the rules were fixed):
+Two sets written after the rules were fixed: `holdout.json` (80 messages, 40 risky) and `fresh.json` (60 messages, 30 risky).
 
-| Check | Risky messages caught | False alarms on ordinary |
-|---|---|---|
-| Wording rules | 50% | 2 of 40 |
-| Wording rules + model pointers | 67.5% | 2 of 40 |
+| Set | Check | Risky messages caught | False alarms on ordinary |
+|---|---|---|---|
+| holdout | Wording rules | 50% | 2 of 40 |
+| holdout | Wording rules + model pointers | 65% | 2 of 40 |
+| fresh | Wording rules | 63.3% | 2 of 30 |
+| fresh | Wording rules + model pointers | 76.7% | 2 of 30 |
 
 The model only points at words. Code checks that every phrase really appears in the message, and code alone decides the result.
 

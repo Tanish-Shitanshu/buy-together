@@ -8,7 +8,7 @@ Live: https://buy-together-v008.onrender.com (auto-deploys from main)
 - Languages + voice (Sarvam translate, STT, TTS), group chat translation, assistant.
 - New deal from any product (Channel3 prices), join requests from agents (MCP at /mcp), family helper approval.
 - AG Grid order book, Bryntum delivery board, Director mode.
-- Pause eval on holdout (80 msgs): rules 50% recall, rules+model 67.5% recall, 2 false alarms of 40 each.
+- Pause eval (holdout 80 + fresh 60 msgs): rules 50% / 63.3% recall, rules+model 65% / 76.7%, 2 false alarms per set.
 - README, PLAN, docs/VIDEO_SCRIPT.md, docs/DEVPOST.md.
 
 ## Next (Tiger only)
