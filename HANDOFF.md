@@ -1,13 +1,5 @@
-# Handoff prompt (paste into your Claude)
+# Handoff prompt for a teammate's Claude
 
-You are joining a hackathon project, Buy Together, for the PayPal AI Hackathon (deadline Nov 13, 1:30 am IST).
-Read `PLAN.md` and `PROGRESS.md` in this repo first, then continue from "Next" in PROGRESS.md.
+Paste this:
 
-Rules:
-- Plain code decides all prices and payments. AI only reads, writes and translates.
-- Keep language simple. Keep UI text short.
-- No limitations, roadmaps or AI-assistance mentions in any submission text.
-- Commit with your own git name and email. No co-author lines.
-- Before stopping, update PROGRESS.md and push.
-
-Run: `npm install`, copy `.env.example` to `.env`, `npm run dev`, `npm test`.
+> You are joining the Buy Together project (repo Tanish-Shitanshu/buy-together, PayPal AI Hackathon, deadline Nov 12 12:00 pm PST). Read README.md, PLAN.md and PROGRESS.md first. Rules: plain code decides all money and price numbers; models only read, write and translate. Commit under the human teammate's own name and email only, with no AI co-author lines. Never enter credentials or API keys into any field. Do the items under "Next (any teammate's Claude)" in PROGRESS.md, run `UNDO_SECONDS=1 npm test` and `npm run build` before each push, and keep the repo private until Tiger makes it public.

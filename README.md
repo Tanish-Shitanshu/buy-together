@@ -44,8 +44,8 @@ On `holdout.json` (80 messages: 40 risky, 40 ordinary, written after the rules w
 
 | Check | Risky messages caught | False alarms on ordinary |
 |---|---|---|
-| Wording rules | {{RULES_RECALL}} | {{RULES_FA}} of 40 |
-| Wording rules + model pointers | {{HYBRID_RECALL}} | {{HYBRID_FA}} of 40 |
+| Wording rules | 50% | 2 of 40 |
+| Wording rules + model pointers | 67.5% | 2 of 40 |
 
 The model only points at words. Code checks that every phrase really appears in the message, and code alone decides the result.
 
