@@ -15,7 +15,7 @@ const theme = themeQuartz.withParams({
   headerFontWeight: 700,
   borderRadius: 8,
   wrapperBorderRadius: 10,
-  rowHeight: 52,
+  rowHeight: 58,
   fontSize: 14,
 });
 

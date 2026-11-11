@@ -11,7 +11,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 const theme = themeQuartz.withParams({
   fontFamily: "Hind, 'Noto Sans Tamil', 'Noto Sans Telugu', system-ui, sans-serif",
   accentColor: '#4C4BC4', backgroundColor: '#FFFFFF', headerBackgroundColor: '#EEF1F6',
-  headerFontWeight: 700, borderRadius: 8, wrapperBorderRadius: 10, rowHeight: 46, fontSize: 14,
+  headerFontWeight: 700, borderRadius: 8, wrapperBorderRadius: 10, rowHeight: 54, fontSize: 14,
 });
 
 interface Row { id: string; name: string; color: string; order: string; auth: string; mode: string; held: number; spent: number; back: number; stamp: string; total?: boolean }

@@ -17,7 +17,7 @@
 }
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; }
-body { margin: 0; background: var(--ground); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: var(--ground) radial-gradient(circle at 1px 1px, rgba(27,36,48,.07) 1px, transparent 0) 0 0 / 22px 22px; color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
 button, input, select, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; }
 :focus-visible { outline: 3px solid var(--indigo); outline-offset: 2px; border-radius: 6px; }
@@ -189,3 +189,28 @@ input[type=number], input[type=text], textarea { border: 1.5px solid var(--line)
 .invite { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 14px; border-radius: 12px; background: #fff; border: 1px dashed var(--line); font-size: 14px; }
 .invite span { flex: 1; min-width: 200px; }
 .invite a.btn { text-decoration: none; }
+
+/* header, tidied: demo controls moved to a dock */
+.app { padding-bottom: 76px; }
+.bar { position: sticky; top: 0; z-index: 20; box-shadow: 0 6px 18px -12px rgba(0,0,0,.5); }
+.dock { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 30; display: flex; align-items: center; gap: 10px; padding: 8px 10px 8px 16px; background: var(--ink); color: #fff; border-radius: 16px; box-shadow: 0 14px 34px -10px rgba(27,36,48,.6); max-width: calc(100vw - 20px); flex-wrap: wrap; justify-content: center; }
+.dock .dockname { font-family: var(--display); font-weight: 800; font-size: 13px; color: #AAB6C8; letter-spacing: .02em; }
+.dock .dots { display: inline-flex; gap: 5px; }
+.dock .dots i { width: 9px; height: 9px; border-radius: 50%; background: #3A4A63; transition: background .3s; }
+.dock .dots i.on { background: var(--saffron); }
+.dock .steptxt { font-size: 12.5px; color: #C7D0DE; }
+.dock .btn { background: #3A4A63; padding: 8px 12px; }
+.dock .btn.primary { background: var(--saffron); color: var(--ink); }
+
+/* intro */
+.intro { background: linear-gradient(135deg, #1B2430, #2B3A55); color: #fff; border-radius: var(--r); padding: 20px 22px 22px; box-shadow: 0 14px 30px -18px rgba(27,36,48,.7); }
+.introhead { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+.intro h1 { font-size: 30px; font-variation-settings: 'wdth' 80; font-weight: 800; line-height: 1.1; }
+.intro p { margin: 6px 0 0; color: #C7D0DE; max-width: 62ch; }
+.intro .btn.ghost { color: #fff; border-color: #5B6C88; background: transparent; }
+.introsteps { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 18px 0 0; padding: 0; }
+.introsteps li { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; border-top: 3px solid var(--c); }
+.introsteps svg { background: #fff; border-radius: 10px; padding: 5px; width: 46px; height: 46px; margin-bottom: 4px; }
+.introsteps b { font-family: var(--display); font-size: 17px; }
+.introsteps span { font-size: 13.5px; color: #C7D0DE; line-height: 1.4; }
+@media (max-width: 700px) { .intro h1 { font-size: 24px; } .dock .dockname, .dock .dots { display: none; } }

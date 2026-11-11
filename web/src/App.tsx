@@ -11,6 +11,7 @@ import { AgentRequests } from './components/AgentRequests';
 import { HelperView } from './components/HelperView';
 import { Delivery } from './components/Delivery';
 import { Invite } from './components/Invite';
+import { Intro } from './components/Intro';
 import type { LangCode } from '../../shared/types';
 
 export function App() {
@@ -21,6 +22,7 @@ export function App() {
   const [busy, setBusy] = useState(false);
   const [dealId, setDealId] = useState(() => new URLSearchParams(location.search).get('deal') ?? '');
   const [showNew, setShowNew] = useState(false);
+  const [showIntro, setShowIntro] = useState(true);
 
   // Follow the chosen buyer's language until the user picks one by hand.
   const [manual, setManual] = useState(false);
@@ -64,14 +66,11 @@ export function App() {
             {state.config.languages.map(l => <option key={l.code} value={l.code}>{l.native}</option>)}
           </select>
         </label>
-        <span className="pill">{t('top.step', { n: state.storyStep, total: state.storyTotal })}</span>
-        <button className="btn primary" disabled={busy || state.storyStep >= state.storyTotal} onClick={() => director(() => post('/api/demo/step'))}>{t('top.next')}</button>
-        <button className="btn" disabled={busy || state.storyStep >= state.storyTotal} onClick={() => director(() => post('/api/demo/run'))}>{t('top.run')}</button>
-        <button className="btn" onClick={() => director(async () => { await post('/api/reset'); })}>{t('top.reset')}</button>
       </header>
 
       <div className="layout">
         <main className="main">
+          {showIntro && deal.status === 'open' && state.storyStep === 0 && <Intro onClose={() => setShowIntro(false)} />}
           {showNew && <NewDeal state={state} viewAs={viewAs} act={act} onCreated={id => { setDealId(id); setShowNew(false); }} />}
           <Hero state={state} deal={deal} />
           {deal.status === 'open' && <Invite deal={deal} />}
@@ -90,6 +89,14 @@ export function App() {
           <TopPanel state={state} deal={deal} viewAs={viewAs} lang={lang} act={act} />
           <BottomPanel state={state} deal={deal} />
         </aside>
+      </div>
+      <div className="dock" role="group" aria-label={t('dock.title')}>
+        <span className="dockname">{t('dock.title')}</span>
+        <span className="dots" aria-hidden>{Array.from({ length: state.storyTotal }, (_, i) => <i key={i} className={i < state.storyStep ? 'on' : ''} />)}</span>
+        <span className="steptxt">{t('top.step', { n: state.storyStep, total: state.storyTotal })}</span>
+        <button className="btn primary" disabled={busy || state.storyStep >= state.storyTotal} onClick={() => director(() => post('/api/demo/step'))}>{t('top.next')}</button>
+        <button className="btn" disabled={busy || state.storyStep >= state.storyTotal} onClick={() => director(() => post('/api/demo/run'))}>{t('top.run')}</button>
+        <button className="btn" onClick={() => director(async () => { await post('/api/reset'); setShowIntro(true); })}>{t('top.reset')}</button>
       </div>
     </div>
   );
