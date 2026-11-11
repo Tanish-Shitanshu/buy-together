@@ -84,6 +84,13 @@ app.post('/api/deals/:id/negotiate', wrap(async (req, res) => {
 app.post('/api/deals/:id/settle', wrap(async (req, res) => { res.json(await engine.settle(req.params.id)); }));
 app.post('/api/deals/:id/cancel', wrap(async (req, res) => { await engine.cancel(req.params.id); res.json({ ok: true }); }));
 
+app.post('/api/commitments/:id/helper', wrap(async (req, res) => { engine.setHelper(req.params.id, String(req.body?.name ?? '')); res.json({ ok: true }); }));
+app.post('/api/commitments/:id/helper/answer', wrap(async (req, res) => {
+  const d = req.body?.decision;
+  if (d !== 'yes' && d !== 'no') throw new UserError('Say yes or no');
+  await engine.answerHelper(req.params.id, d);
+  res.json({ ok: true });
+}));
 app.post('/api/commitments/:id/approve', wrap(async (req, res) => { await engine.approve(req.params.id, req.body?.decision === 'no' ? 'no' : 'yes'); res.json({ ok: true }); }));
 app.post('/api/commitments/:id/withdraw', wrap(async (req, res) => { await engine.withdraw(req.params.id); res.json({ ok: true }); }));
 app.post('/api/commitments/:id/paypal/order', wrap(async (req, res) => { res.json(await engine.paypalOrder(req.params.id)); }));

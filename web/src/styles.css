@@ -167,3 +167,7 @@ input[type=number], input[type=text], textarea { border: 1.5px solid var(--line)
 .found-row img, .found-row .ph { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; background: var(--line); }
 .found-row .ttl { display: flex; flex-direction: column; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
 .found-row .ttl small { color: var(--muted, #667); font-size: 12px; }
+
+.helper { max-width: 560px; margin: 24px auto; padding: 0 14px; }
+.helperbox input { flex: 1; min-width: 0; }
+.agentreq { border-left: 6px solid var(--saffron); }

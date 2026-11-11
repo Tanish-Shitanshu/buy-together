@@ -248,6 +248,7 @@ export async function approve(commitmentId: string, decision: 'yes' | 'no') {
     resetToOpen(deal, 'A buyer said no, so the agent will check the price again with the rest.');
   } else {
     if (deal.finalUnitPrice! > c.maxUnitPrice + 1e-9) throw new UserError('The price is above this buyer\'s walk-away limit');
+    if (c.helperName && !c.helperOk) throw new UserError(`${c.helperName} has to confirm first`);
     c.approval = 'yes';
     addEvent(deal.id, 'approve', `${buyer.name} said yes to ${usd(deal.finalUnitPrice!)} per ${deal.product.unit}.`, 'good');
     maybeOpenUndo(deal);
@@ -354,4 +355,30 @@ export async function answerJoinRequest(id: string, decision: 'yes' | 'no', inte
   r.status = 'approved';
   commit();
   return r;
+}
+
+/** A family helper has to confirm a buyer's yes. The helper gets a link and answers in their own language. */
+export function setHelper(commitmentId: string, name: string) {
+  const c = needCommitment(commitmentId);
+  const clean = name.trim().slice(0, 30);
+  if (c.status !== 'held') throw new UserError('This share is not held');
+  if (c.approval === 'yes') throw new UserError('Already approved');
+  if (clean) { c.helperName = clean; c.helperOk = false; } else { c.helperName = undefined; c.helperOk = undefined; }
+  commit();
+}
+
+export async function answerHelper(commitmentId: string, decision: 'yes' | 'no') {
+  const c = needCommitment(commitmentId);
+  const deal = needDeal(c.dealId);
+  const buyer = getBuyer(c.buyerId)!;
+  if (!c.helperName) throw new UserError('No helper is set for this share');
+  if (deal.status !== 'review') throw new UserError('There is nothing to confirm right now');
+  if (decision === 'yes') {
+    c.helperOk = true;
+    addEvent(deal.id, 'helper', `${c.helperName} checked the deal for ${buyer.name} and said it looks right.`, 'good');
+    commit();
+  } else {
+    addEvent(deal.id, 'helper', `${c.helperName} advised ${buyer.name} not to go ahead.`, 'warn');
+    await approve(commitmentId, 'no');
+  }
 }

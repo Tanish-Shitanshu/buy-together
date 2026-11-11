@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { speak } from './voice';
 import type { AppState, Commitment, Deal, Highlight, PauseReport } from '../../../shared/types';
 import { useT } from '../i18n';
 import { post, usd, usd0, num } from '../api';
@@ -203,9 +204,10 @@ export function Review({ state, deal, viewAs, act }: { state: AppState; deal: De
               <div className="calc">{t('review.cost', { u: deal.product.unit + 's', q: num(c.qty), p: usd(price), a: usd0(amt) })}</div>
               <div className="num amt">{usd0(amt)}</div>
               <div className="back">{t('review.back', { a: usd0(back) })}</div>
+              {b.id === viewAs && c.approval === 'pending' && <HelperBox c={c} act={act} />}
               {b.id === viewAs && c.approval === 'pending' && (
                 <div className="row" style={{ marginTop: 8 }}>
-                  <button className="btn good sm" onClick={() => act(() => post(`/api/commitments/${c.id}/approve`, { decision: 'yes' }))}>{t('review.approve')}</button>
+                  <button className="btn good sm" disabled={Boolean(c.helperName && !c.helperOk)} onClick={() => act(() => post(`/api/commitments/${c.id}/approve`, { decision: 'yes' }))}>{t('review.approve')}</button>
                   <button className="btn ghost sm" onClick={() => act(() => post(`/api/commitments/${c.id}/approve`, { decision: 'no' }))}>{t('review.no')}</button>
                 </div>
               )}
@@ -228,9 +230,36 @@ export function Review({ state, deal, viewAs, act }: { state: AppState; deal: De
   );
 }
 
-/* ---------- Receipt ---------- */
-export function Receipt({ state, deal }: { state: AppState; deal: Deal }) {
+function HelperBox({ c, act }: { c: Commitment; act: Act }) {
   const { t } = useT();
+  const [name, setName] = useState('');
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const link = `${location.origin}/?helper=${c.id}`;
+  if (c.helperName) {
+    return (
+      <div className="helperbox">
+        <div className="muted" style={{ fontWeight: 600 }}>{c.helperOk ? t('helper.ok', { n: c.helperName }) : t('helper.waiting', { n: c.helperName })}</div>
+        {!c.helperOk && (
+          <div className="row" style={{ marginTop: 6 }}>
+            <input type="text" readOnly value={link} onFocus={e => e.currentTarget.select()} aria-label={t('helper.link')} />
+            <button className="btn sm ghost" onClick={() => { navigator.clipboard?.writeText(link).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1500); }).catch(() => { /* ignore */ }); }}>{copied ? t('helper.copied') : t('helper.copy')}</button>
+          </div>
+        )}
+      </div>
+    );
+  }
+  return open ? (
+    <div className="row helperbox" style={{ marginTop: 8 }}>
+      <input type="text" value={name} placeholder={t('helper.name')} onChange={e => setName(e.target.value)} aria-label={t('helper.name')} />
+      <button className="btn sm" disabled={name.trim().length < 2} onClick={() => act(() => post(`/api/commitments/${c.id}/helper`, { name }))}>{t('helper.save')}</button>
+    </div>
+  ) : <button className="btn ghost sm" style={{ marginTop: 8 }} onClick={() => setOpen(true)}>{t('helper.add')}</button>;
+}
+
+/* ---------- Receipt ---------- */
+export function Receipt({ state, deal, viewAs }: { state: AppState; deal: Deal; viewAs: string }) {
+  const { t, lang } = useT();
   const s = deal.summary!;
   const paid = state.commitments.filter(c => c.dealId === deal.id && c.status === 'captured');
   return (
@@ -238,6 +267,12 @@ export function Receipt({ state, deal }: { state: AppState; deal: Deal }) {
       <h2 style={{ marginBottom: 6 }}>{t('paid.title')}</h2>
       <div className="num save">{t('paid.saved', { t: usd0(s.savedTotal) })}</div>
       <p className="muted">{t('paid.total', { u: deal.product.unit + 's', a: usd0(s.paidTotal), q: num(s.totalQty) })}. {t('paid.each', { p: usd(s.finalPrice), m: usd(deal.marketPrice) })}</p>
+      <button className="btn ghost sm" onClick={() => {
+        const me = state.buyers.find(b => b.id === viewAs) ?? state.buyers[0];
+        const mine = paid.find(c => c.buyerId === me.id);
+        const text = `${t('paid.title')} ${t('paid.saved', { t: usd0(s.savedTotal) })}. ${mine ? t('paid.total', { u: deal.product.unit + 's', a: usd0(mine.captured ?? 0), q: num(mine.qty) }) + '.' : ''} ${t('paid.each', { p: usd(s.finalPrice), m: usd(deal.marketPrice) })}`;
+        speak(text, lang, state.config.languages.find(l => l.code === lang)?.speech ?? 'en-IN', state.config.aiMode === 'live');
+      }}>{t('paid.read')}</button>
       <div className="grid2" style={{ textAlign: 'left', marginTop: 12 }}>
         {paid.map(c => {
           const b = state.buyers.find(x => x.id === c.buyerId)!;

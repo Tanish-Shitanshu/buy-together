@@ -77,3 +77,25 @@ test('cancel returns every hold', async () => {
   assert.ok(store.commitments.every(c => c.status === 'voided'));
   assert.equal(getDeal(DEAL_ID)!.status, 'cancelled');
 });
+
+test('family helper must confirm before the buyer\'s yes counts; helper "no" releases the hold', async () => {
+  resetStore();
+  await engine.join(DEAL_ID, 'b_ravi', 400, 0.74);
+  await engine.join(DEAL_ID, 'b_meena', 600, 0.72);
+  await engine.negotiateDeal(DEAL_ID);
+  const ravi = store.commitments.find(c => c.buyerId === 'b_ravi')!;
+  engine.setHelper(ravi.id, 'Dadi');
+  await assert.rejects(() => engine.approve(ravi.id, 'yes'), /Dadi has to confirm/);
+  await engine.answerHelper(ravi.id, 'yes');
+  await engine.approve(ravi.id, 'yes');
+  assert.equal(ravi.approval, 'yes');
+
+  resetStore();
+  await engine.join(DEAL_ID, 'b_ravi', 400, 0.74);
+  await engine.join(DEAL_ID, 'b_meena', 600, 0.72);
+  await engine.negotiateDeal(DEAL_ID);
+  const r2 = store.commitments.find(c => c.buyerId === 'b_ravi')!;
+  engine.setHelper(r2.id, 'Dadi');
+  await engine.answerHelper(r2.id, 'no');
+  assert.equal(r2.status, 'voided');
+});

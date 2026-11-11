@@ -57,6 +57,8 @@ export interface Commitment {
   captureId?: string;
   createdAt: number;
   note?: string;
+  helperName?: string;   // a family member who must confirm before this buyer's yes counts
+  helperOk?: boolean;
 }
 
 export interface ChatMessage {

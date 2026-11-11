@@ -7,6 +7,7 @@ import { JoinPanel, Negotiation, Receipt, Review } from './components/Stage';
 import { BottomPanel, TopPanel } from './components/SidePanels';
 import { NewDeal } from './components/NewDeal';
 import { AgentRequests } from './components/AgentRequests';
+import { HelperView } from './components/HelperView';
 import type { LangCode } from '../../shared/types';
 
 export function App() {
@@ -33,6 +34,8 @@ export function App() {
   const director = async (fn: () => Promise<unknown>) => { setBusy(true); await act(fn); setBusy(false); };
 
   if (!state) return <div className="app"><div className="bar"><span className="brand">Buy Together</span><span className="tag">{online ? '…' : 'Connecting'}</span></div></div>;
+  const helperId = new URLSearchParams(location.search).get('helper');
+  if (helperId) return <HelperView state={state} commitmentId={helperId} />;
   const deal = state.deals.find(d => d.id === dealId) ?? state.deals[0];
 
   return (
@@ -72,7 +75,7 @@ export function App() {
           <AgentRequests state={state} viewAs={viewAs} dealId={deal.id} act={act} />
           {deal.status === 'open' && <div id="join-panel"><JoinPanel state={state} deal={deal} viewAs={viewAs} act={act} /></div>}
           {deal.status === 'review' && <Review state={state} deal={deal} viewAs={viewAs} act={act} />}
-          {deal.status === 'paid' && deal.summary && <Receipt state={state} deal={deal} />}
+          {deal.status === 'paid' && deal.summary && <Receipt state={state} deal={deal} viewAs={viewAs} />}
           {deal.status === 'cancelled' && <section className="card"><h2>{t('cancel.title')}</h2></section>}
           {deal.quotes.length > 0 && <Negotiation state={state} deal={deal} />}
           <OrderBook state={state} dealId={deal.id} />
