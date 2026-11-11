@@ -149,7 +149,7 @@ app.get('/api/pause/eval', wrap(async (req, res) => {
   const rows: { text: string; risky: boolean }[] = JSON.parse(fs.readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname), '..', 'eval', `${set}.json`), 'utf8'));
   const verdicts: ('pass' | 'warn' | 'fail')[] = new Array(rows.length);
   let next = 0;
-  await Promise.all(Array.from({ length: 6 }, async () => {
+  await Promise.all(Array.from({ length: 12 }, async () => {
     while (next < rows.length) { const i = next++; verdicts[i] = messageVerdict(await checkText(rows[i].text, useModel)).status; }
   }));
   const m = (pred: (v: string) => boolean) => {

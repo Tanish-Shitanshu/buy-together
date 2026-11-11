@@ -13,16 +13,19 @@ AI reads, writes and translates. Plain code decides every price and every paymen
 | Pause | `pause.ts` | Price, seller, pressure words, money, group. Shared warning list. Undo window. |
 | Languages | `chat.ts`, `assistant.ts` | Group chat auto-translates. Assistant answers in the user's language. UI strings translated and cached. |
 | Demo | `story.ts` | Director mode: 5 scripted steps using the same engine calls as the buttons. |
-| Web | `web/` | React + Vite + AG Grid. |
+| Web | `web/` | React + Vite + AG Grid + Bryntum Scheduler. |
+| Agents | `mcp.ts` | MCP over HTTP. Outside agents can read, check messages and ask to join (buyer approves). |
+| Helper | `engine.ts` | A family member confirms a buyer's yes through a link. |
+| Delivery | `engine.ts`, `Delivery.tsx` | One truck plan, validated on the server. |
 
 ## API
 `GET /api/state`, `GET /api/events` (SSE snapshots), `POST /api/reset`,
 `POST /api/deals/:id/{join,negotiate,settle,cancel}`,
 `POST /api/commitments/:id/{approve,withdraw}`, `.../paypal/{order,authorize}`,
-`POST /api/{chat,assistant,i18n}`, `POST /api/demo/{step,run}`, `POST /api/paypal/webhook`.
+`POST /api/{chat,assistant,i18n,stt,tts,deals}`, `GET /api/market/search`, `POST /api/deals/:id/schedule`, `POST /api/commitments/:id/helper[/answer]`, `POST /api/join-requests/:id/{approve,decline}`, `POST /mcp`, `GET /api/pause/eval`, `POST /api/demo/{step,run}`, `POST /api/paypal/webhook`.
 
 ## Sponsors
-PayPal (core) · AG Grid (live order book) · Channel3 (market price check) · Render (hosting) · APIMatic (PayPal Context Plugin while building) · Bryntum (timeline, stretch).
+PayPal (core) · Sarvam (languages and voice) · AG Grid (live order book) · Channel3 (shop prices) · Bryntum (delivery board) · Render (hosting).
 
 ## Cut order if time runs short
 Bryntum timeline, then Channel3 live call (benchmark stays), then voice. Never cut: holds, Pause, translated chat, the demo video.

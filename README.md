@@ -1,10 +1,68 @@
 # Buy Together
 
-Strangers pool their orders to reach a bulk price. An AI agent negotiates for the group. PayPal holds every buyer's share separately, and money moves only when everyone has said yes.
+Strangers pool their orders to reach a bulk price. Munim, the group's agent, negotiates for everyone. PayPal holds each buyer's share separately, and money moves only when every buyer has said yes.
 
-Run it: `npm install`, copy `.env.example` to `.env`, `npm run dev`. Without keys it runs with simulated holds.
-Test it: `npm test`.
+Live demo: https://buy-together-v008.onrender.com
 
-See `PLAN.md` for how it fits together.
+## How a deal works
+1. A buyer joins with a quantity and the highest price they accept. PayPal authorizes that amount for the buyer alone. Nothing is spent.
+2. When the group is large enough, Munim asks sellers for quotes and negotiates. It never goes above the lowest limit in the group.
+3. Pause checks every offer: price against the market, seller and shared warning list, pressure wording, hold coverage, group and limits. Bad offers are blocked and the risky words are highlighted.
+4. Each buyer approves the final price. A family helper can be asked to check first and hears the deal in their own language.
+5. After the Undo window closes, PayPal captures each buyer's exact share (partial capture) and releases the rest. If anyone says no, nothing is captured.
+6. Munim plans one delivery truck with a stop at every shop. Stops can be dragged to new times.
+
+Rule for the code: models read, write and translate. Plain code decides every price and every payment.
+
+## Features
+- Ten languages in the app, group chat (messages translated for each reader), assistant, voice in and out.
+- Start a deal for any product. Channel3 shows real shop prices to set the usual price.
+- Live order book (AG Grid) with stamps for each hold.
+- Delivery day board (Bryntum Scheduler).
+- Family helper approval through a link.
+- Shared warning list across buying groups.
+- MCP server at `/mcp` for other agents.
+- Director mode: a scripted five-step run of the full flow, using the same calls as the buttons.
+
+## PayPal
+Orders v2 `intent=AUTHORIZE` per buyer, then Payments v2 capture (partial amount, `final_capture: true`) or void. A pre-flight check on every authorization runs just before capture. `PayPal-Request-Id` on every write. Webhooks are verified with `/v1/notifications/verify-webhook-signature` at `/api/paypal/webhook`. Buyers approve in the PayPal pop-up (JS SDK, `intent=authorize`).
+
+## Sponsors
+| Sponsor | Where |
+|---|---|
+| PayPal | `server/src/paypal.ts`, `server/src/engine.ts` |
+| Sarvam | `server/src/sarvam.ts`, `server/src/chat.ts`, `server/src/llm.ts`, voice in `web/src/components/voice.ts` |
+| Channel3 | `server/src/market.ts`, New deal panel |
+| AG Grid | `web/src/components/OrderBook.tsx` |
+| Bryntum | `web/src/components/Delivery.tsx` |
+| Render | `render.yaml` |
+
+## Pause evaluation
+Labelled seller messages are in `server/eval` (`dev`, `test`, `holdout`). Run the wording rules with `cd server && npx tsx eval/run.ts holdout.json`. The live app also exposes `/api/pause/eval?set=holdout&model=1` to include the model layer.
+
+On `holdout.json` (80 messages: 40 risky, 40 ordinary, written after the rules were fixed):
+
+| Check | Risky messages caught | False alarms on ordinary |
+|---|---|---|
+| Wording rules | {{RULES_RECALL}} | {{RULES_FA}} of 40 |
+| Wording rules + model pointers | {{HYBRID_RECALL}} | {{HYBRID_FA}} of 40 |
+
+The model only points at words. Code checks that every phrase really appears in the message, and code alone decides the result.
+
+## MCP
+`POST /mcp` (JSON-RPC). Tools: `list_deals`, `get_deal`, `check_message`, `check_seller`, `request_join`. `request_join` creates a request that the buyer must approve in the app before any money is held.
+
+## Run it
+```
+npm install
+cp .env.example .env     # add keys; with no PayPal keys it runs with simulated holds
+npm run dev              # web on :5173, API on :8787
+npm test
+npm run build && npm start
+```
+Environment: `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_WEBHOOK_ID`, `PAYPAL_ENV=sandbox`, `SARVAM_API_KEY`, `CHANNEL3_API_KEY`, `UNDO_SECONDS`.
+
+## Layout
+`server/` Express API, engine, Pause, negotiation, translation. `web/` React app. `shared/` types. `docs/` video script and Devpost text.
 
 License: MIT.
