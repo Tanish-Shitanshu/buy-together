@@ -35,7 +35,18 @@ export function pressureSpans(text: string): Highlight[] {
 export async function modelSpans(text: string): Promise<Highlight[]> {
   const kinds = PRESSURE.map(p => p.label);
   const r = await llmJson<{ flags?: { kind?: string; phrase?: string }[] }>({
-    system: `You check a seller's message to a group of shop owners. The group pays through a platform that holds their money until delivery. Find wording that rushes them, asks for payment outside the platform, removes their way back, makes empty promises, asks for secrecy, or asks for card or login details. Use only these kinds: ${kinds.join('; ')}. Reply with JSON only: {"flags":[{"kind":"<one kind>","phrase":"<exact words copied from the message>"}]}. Normal messages about delivery, price, quantity, quality or deadlines are not flags; reply {"flags":[]}. Never invent words.`,
+    system: `You check a seller's message to a group of shop owners. The group pays only through a platform that holds their money until delivery. Mark every phrase that does one of these: ${kinds.join('; ')}.
+Meaning of each kind: "Time pressure" = a deadline, countdown, vanishing stock or price rise used to rush a decision. "Pays outside the held deal" = any request to pay by cash, wallet, UPI, bank, transfer, link, voucher, a person's own number or any route other than the platform, including fees, deposits, tokens or charges paid first. "No way back" = no refund, no cancel, no return. "Empty assurance" = promises or trust talk with no proof. "Asks for secrecy" = keep it quiet, tell no one, only for you. "Asks for card or login details" = OTP, PIN, password, card or bank login.
+Examples:
+Message: "Stock ends tonight. Put the amount in my cousin's wallet and don't mention it to the others."
+{"flags":[{"kind":"Time pressure","phrase":"Stock ends tonight"},{"kind":"Pays outside the held deal","phrase":"Put the amount in my cousin's wallet"},{"kind":"Asks for secrecy","phrase":"don't mention it to the others"}]}
+Message: "Pay a clearance fee on this link first, otherwise the shipment is returned. Whatever happens, it is sold as is."
+{"flags":[{"kind":"Pays outside the held deal","phrase":"Pay a clearance fee on this link first"},{"kind":"No way back","phrase":"it is sold as is"}]}
+Message: "Read me the code that arrives by SMS so I can confirm you. You can rely on me completely."
+{"flags":[{"kind":"Asks for card or login details","phrase":"Read me the code that arrives by SMS"},{"kind":"Empty assurance","phrase":"You can rely on me completely"}]}
+Message: "We can deliver 600 cans in six days at the quoted rate. Payment is through the held deal, so nothing is due before delivery."
+{"flags":[]}
+Reply with JSON only: {"flags":[{"kind":"<one kind from the list>","phrase":"<exact words copied from the message>"}]}. Normal messages about delivery, price, quantity, quality or deadlines for delivery are not flags; reply {"flags":[]}. Never invent words.`,
     user: text.slice(0, 1000), fast: true, maxTokens: 1500,
   });
   const out: Highlight[] = [];
