@@ -7,7 +7,7 @@ import { marketMedian } from './market';
 import {
   store, commit, addEvent, getDeal, getBuyer, getSeller, heldCommitments, heldQty, tierFor, uid, r2, sleep,
 } from './store';
-import type { Commitment, Deal, JoinRequest } from '../../shared/types';
+import type { Commitment, Deal, DeliverySlot, JoinRequest } from '../../shared/types';
 
 export class UserError extends Error {
   constructor(msg: string, public status = 400) { super(msg); }
@@ -222,6 +222,7 @@ export async function negotiateDeal(dealId: string) {
   for (const c of held) c.approval = getBuyer(c.buyerId)?.autonomy === 'auto' && best.unitPrice <= c.maxUnitPrice ? 'yes' : 'pending';
   const seller = getSeller(best.sellerId)!;
   addEvent(dealId, 'review', `${seller.name} at ${usd(best.unitPrice)} per ${deal.product.unit}. Each buyer must say yes before any money moves.`, 'good');
+  deal.delivery = planDelivery(deal);
   maybeOpenUndo(deal);
   commit();
   return deal;
@@ -381,4 +382,32 @@ export async function answerHelper(commitmentId: string, decision: 'yes' | 'no')
     addEvent(deal.id, 'helper', `${c.helperName} advised ${buyer.name} not to go ahead.`, 'warn');
     await approve(commitmentId, 'no');
   }
+}
+
+/** Munim's first plan for the delivery truck: shops in city order, stop length grows with quantity, 15 minutes between stops. */
+export function planDelivery(deal: Deal): DeliverySlot[] {
+  const held = heldCommitments(deal.id)
+    .map(c => ({ c, b: getBuyer(c.buyerId)! }))
+    .sort((x, y) => x.b.city.localeCompare(y.b.city) || x.b.name.localeCompare(y.b.name));
+  let t = 0;
+  return held.map(({ c }) => {
+    const len = Math.min(120, Math.max(30, Math.round((20 + c.qty / 12) / 5) * 5));
+    const slot = { buyerId: c.buyerId, startMin: t, endMin: t + len };
+    t += len + 15;
+    return slot;
+  });
+}
+
+export function setDelivery(dealId: string, slots: DeliverySlot[]) {
+  const deal = needDeal(dealId);
+  if (deal.status !== 'review') throw new UserError('The delivery plan can be changed while the deal is being approved');
+  const ids = new Set(heldCommitments(dealId).map(c => c.buyerId));
+  const clean = slots.map(s => ({ buyerId: String(s.buyerId), startMin: Math.round(Number(s.startMin)), endMin: Math.round(Number(s.endMin)) }));
+  if (clean.length !== ids.size || !clean.every(s => ids.has(s.buyerId))) throw new UserError('Every paying shop needs exactly one stop');
+  if (clean.some(s => !(s.startMin >= 0 && s.endMin > s.startMin && s.endMin <= 720))) throw new UserError('Stops must fit inside the 12 hour delivery day');
+  const sorted = [...clean].sort((a, b) => a.startMin - b.startMin);
+  for (let i = 1; i < sorted.length; i++) if (sorted[i].startMin < sorted[i - 1].endMin) throw new UserError('One truck cannot be at two shops at once');
+  deal.delivery = clean;
+  addEvent(dealId, 'delivery', 'The delivery plan was changed.', 'info');
+  commit();
 }

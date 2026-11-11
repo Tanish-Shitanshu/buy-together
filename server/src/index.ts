@@ -84,6 +84,12 @@ app.post('/api/deals/:id/negotiate', wrap(async (req, res) => {
 app.post('/api/deals/:id/settle', wrap(async (req, res) => { res.json(await engine.settle(req.params.id)); }));
 app.post('/api/deals/:id/cancel', wrap(async (req, res) => { await engine.cancel(req.params.id); res.json({ ok: true }); }));
 
+app.post('/api/deals/:id/schedule', wrap(async (req, res) => {
+  const slots = req.body?.slots;
+  if (!Array.isArray(slots)) throw new UserError('Send the list of stops');
+  engine.setDelivery(req.params.id, slots);
+  res.json({ ok: true });
+}));
 app.post('/api/commitments/:id/helper', wrap(async (req, res) => { engine.setHelper(req.params.id, String(req.body?.name ?? '')); res.json({ ok: true }); }));
 app.post('/api/commitments/:id/helper/answer', wrap(async (req, res) => {
   const d = req.body?.decision;
@@ -132,6 +138,11 @@ app.post('/api/pause/check-message', wrap(async (req, res) => {
 }));
 
 /** Scores Pause's message check on the labelled sets in server/eval. `model=1` adds the model's pointers. */
+app.get('/api/pause/model-raw', wrap(async (req, res) => {
+  const { llm } = await import('./llm');
+  const raw = await llm({ system: 'Reply with JSON only: {"flags":[{"kind":"Pays outside the held deal","phrase":"<exact words>"}]} for any wording in the message that asks for payment outside the platform. Otherwise {"flags":[]}.', user: String(req.query.text ?? '').slice(0, 500), fast: true, maxTokens: 1200 });
+  res.json({ raw });
+}));
 app.get('/api/pause/eval', wrap(async (req, res) => {
   const set = String(req.query.set ?? 'holdout').replace(/[^a-z]/g, '');
   const useModel = req.query.model === '1';

@@ -106,6 +106,8 @@ export interface TimelineEvent {
   tone: 'info' | 'good' | 'warn' | 'bad';
 }
 
+export interface DeliverySlot { buyerId: string; startMin: number; endMin: number } // minutes after the truck leaves, 0 to 720
+
 export interface Deal {
   id: string;
   title: string;
@@ -123,6 +125,7 @@ export interface Deal {
   rounds: Round[];
   chosenSellerId?: string;
   finalUnitPrice?: number;
+  delivery?: DeliverySlot[];    // one truck, one stop per paying shop; Munim plans it, buyers can move stops
   undoUntil?: number;           // end of the Undo window; money moves only after this
   pause: Record<string, PauseReport>;
   summary?: { totalQty: number; listPrice: number; finalPrice: number; savedPerUnit: number; savedTotal: number; paidTotal: number };
