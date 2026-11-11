@@ -30,7 +30,7 @@ export async function llm(req: Req): Promise<string | null> {
       });
       if (!r.ok) throw new Error(`sarvam ${r.status} ${await r.text()}`);
       const j: any = await r.json();
-      out = (j.choices?.[0]?.message?.content ?? null)?.replace(/<think>[\s\S]*?<\/think>/g, '').trim() || null;
+      out = (j.choices?.[0]?.message?.content ?? null)?.replace(/<think>[\s\S]*?(<\/think>|$)/g, '').trim() || null;
     } else if (provider === 'anthropic') {
       const r = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',

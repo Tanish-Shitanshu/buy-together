@@ -36,7 +36,7 @@ export async function modelSpans(text: string): Promise<Highlight[]> {
   const kinds = PRESSURE.map(p => p.label);
   const r = await llmJson<{ flags?: { kind?: string; phrase?: string }[] }>({
     system: `You check a seller's message to a group of shop owners. The group pays through a platform that holds their money until delivery. Find wording that rushes them, asks for payment outside the platform, removes their way back, makes empty promises, asks for secrecy, or asks for card or login details. Use only these kinds: ${kinds.join('; ')}. Reply with JSON only: {"flags":[{"kind":"<one kind>","phrase":"<exact words copied from the message>"}]}. Normal messages about delivery, price, quantity, quality or deadlines are not flags; reply {"flags":[]}. Never invent words.`,
-    user: text.slice(0, 1000), fast: true, maxTokens: 400,
+    user: text.slice(0, 1000), fast: true, maxTokens: 1500,
   });
   const out: Highlight[] = [];
   const low = text.toLowerCase();
