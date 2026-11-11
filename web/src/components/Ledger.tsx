@@ -70,7 +70,7 @@ export function Ledger({ state, dealId }: { state: AppState; dealId: string }) {
       <p className="muted small">{t('ledger.note')}</p>
       <div className="gridwrap ledgergrid">
         <AgGridReact<Row> theme={theme} rowData={rows} columnDefs={cols} getRowId={p => p.data.id} quickFilterText={q}
-          pinnedBottomRowData={totals} defaultColDef={{ sortable: true, resizable: true }} animateRows suppressCellFocus tooltipShowDelay={200}
+          pinnedBottomRowData={totals} defaultColDef={{ sortable: true, resizable: true }} animateRows suppressCellFocus domLayout="autoHeight" tooltipShowDelay={200}
           getRowClass={p => (p.node.rowPinned ? 'totalrow' : '')} />
       </div>
     </section>

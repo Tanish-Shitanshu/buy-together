@@ -64,7 +64,7 @@ export function OrderBook({ state, dealId }: { state: AppState; dealId: string }
     <section className="card" aria-label={t('book.title')}>
       <h2>{t('book.title')}</h2>
       <div className="gridwrap">
-        <AgGridReact<Row> theme={theme} rowData={rows} columnDefs={cols} getRowId={p => p.data.id} animateRows suppressCellFocus domLayout="normal" />
+        <AgGridReact<Row> theme={theme} rowData={rows} columnDefs={cols} getRowId={p => p.data.id} animateRows suppressCellFocus domLayout="autoHeight" />
       </div>
     </section>
   );
