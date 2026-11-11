@@ -6,6 +6,7 @@ import { OrderBook } from './components/OrderBook';
 import { JoinPanel, Negotiation, Receipt, Review } from './components/Stage';
 import { BottomPanel, TopPanel } from './components/SidePanels';
 import { NewDeal } from './components/NewDeal';
+import { AgentRequests } from './components/AgentRequests';
 import type { LangCode } from '../../shared/types';
 
 export function App() {
@@ -68,6 +69,7 @@ export function App() {
           {showNew && <NewDeal state={state} viewAs={viewAs} act={act} onCreated={id => { setDealId(id); setShowNew(false); }} />}
           <Hero state={state} deal={deal} />
           {err && <div className="err" role="alert">{err}</div>}
+          <AgentRequests state={state} viewAs={viewAs} dealId={deal.id} act={act} />
           {deal.status === 'open' && <div id="join-panel"><JoinPanel state={state} deal={deal} viewAs={viewAs} act={act} /></div>}
           {deal.status === 'review' && <Review state={state} deal={deal} viewAs={viewAs} act={act} />}
           {deal.status === 'paid' && deal.summary && <Receipt state={state} deal={deal} />}

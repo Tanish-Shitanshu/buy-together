@@ -149,7 +149,19 @@ export interface PublicConfig {
   agentName: string;
 }
 
+export interface JoinRequest {
+  id: string;
+  dealId: string;
+  buyerId: string;
+  agent: string;                // name of the outside agent that asked
+  qty: number;
+  maxUnitPrice: number;
+  ts: number;
+  status: 'pending' | 'approved' | 'declined';
+}
+
 export interface AppState {
+  joinRequests: JoinRequest[];
   deals: Deal[];
   sellers: Seller[];
   buyers: Buyer[];

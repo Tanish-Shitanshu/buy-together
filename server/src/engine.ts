@@ -7,7 +7,7 @@ import { marketMedian } from './market';
 import {
   store, commit, addEvent, getDeal, getBuyer, getSeller, heldCommitments, heldQty, tierFor, uid, r2, sleep,
 } from './store';
-import type { Commitment, Deal } from '../../shared/types';
+import type { Commitment, Deal, JoinRequest } from '../../shared/types';
 
 export class UserError extends Error {
   constructor(msg: string, public status = 400) { super(msg); }
@@ -149,7 +149,7 @@ export async function negotiateDeal(dealId: string) {
   const total = heldQty(dealId);
   if (total < deal.targetQty) throw new UserError(`The group has ${total} of ${deal.targetQty} ${deal.product.unit}s. The agent starts at ${deal.targetQty}.`);
 
-  const mk = await marketMedian(`${deal.product.name} ${deal.product.pack}`);
+  const mk = await marketMedian(`${deal.product.name} ${deal.product.pack}`, deal.marketPrice);
   if (mk) {
     deal.marketCheck = { source: 'channel3', median: mk.median, count: mk.count };
     addEvent(dealId, 'market', `Channel3 cross-check: ${mk.count} shop listings, middle price ${usd(mk.median)}. Pause compares offers with ${usd(deal.marketPrice)}.`);
@@ -327,4 +327,31 @@ export function onWebhook(event: any) {
     'PAYMENT.CAPTURE.COMPLETED': 'PayPal confirmed a payment.',
   };
   if (label[type]) { addEvent(deal, 'webhook', label[type], 'info'); commit(); }
+}
+
+/** An outside agent (through MCP) can ask to join for a buyer. Nothing is held until the buyer says yes. */
+export function requestJoin(agent: string, dealId: string, buyerId: string, qty: number, maxUnitPrice: number): JoinRequest {
+  const deal = getDeal(dealId);
+  const buyer = getBuyer(buyerId);
+  if (!deal) throw new UserError('No such deal', 404);
+  if (!buyer) throw new UserError('No such buyer', 404);
+  if (deal.status !== 'open') throw new UserError('This deal is not open');
+  if (!(qty >= 1 && qty <= 1_000_000)) throw new UserError('Quantity must be at least 1');
+  if (!(maxUnitPrice > 0)) throw new UserError('Walk-away price must be above zero');
+  const r: JoinRequest = { id: uid('jr'), dealId, buyerId, agent: agent.slice(0, 40) || 'An agent', qty: Math.round(qty), maxUnitPrice, ts: Date.now(), status: 'pending' };
+  store.joinRequests.push(r);
+  addEvent(dealId, 'agent-request', `${r.agent} asked to join for ${buyer.name}: ${r.qty} ${deal.product.unit}s, up to ${usd(maxUnitPrice)} each. Waiting for ${buyer.name} to say yes.`, 'info');
+  commit();
+  return r;
+}
+
+export async function answerJoinRequest(id: string, decision: 'yes' | 'no', interactive = false) {
+  const r = store.joinRequests.find(x => x.id === id);
+  if (!r) throw new UserError('No such request', 404);
+  if (r.status !== 'pending') throw new UserError('Already answered');
+  if (decision === 'no') { r.status = 'declined'; commit(); return r; }
+  await join(r.dealId, r.buyerId, r.qty, r.maxUnitPrice, interactive);
+  r.status = 'approved';
+  commit();
+  return r;
 }

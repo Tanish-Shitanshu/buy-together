@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { config, LANGUAGES, aiProvider } from './config';
 import type {
-  AppState, Buyer, ChatMessage, Commitment, Deal, PublicConfig, ScamEntry, Seller, TimelineEvent, LangCode,
+  AppState, Buyer, JoinRequest, ChatMessage, Commitment, Deal, PublicConfig, ScamEntry, Seller, TimelineEvent, LangCode,
 } from '../../shared/types';
 
 export interface Store {
@@ -14,6 +14,7 @@ export interface Store {
   events: TimelineEvent[];
   scamList: ScamEntry[];
   storyStep: number;
+  joinRequests: JoinRequest[];
 }
 
 export const DAY = 86_400_000;
@@ -65,7 +66,7 @@ export function seed(): Store {
   const scamList: ScamEntry[] = [
     { key: 'fastbulk deals', name: 'FastBulk Deals', reports: 14, families: 9, reasons: ['Price far below market', 'Asked for advance outside the platform', 'Pressure to pay within the hour'], firstSeen: now - 6 * DAY, expiresAt: now + 24 * DAY },
   ];
-  return { deals: [deal], sellers, buyers, commitments, messages: [], events: [], scamList, storyStep: 0 };
+  return { deals: [deal], sellers, buyers, commitments, messages: [], events: [], scamList, storyStep: 0, joinRequests: [] };
 }
 
 const file = () => path.join(config.dataDir, 'state.json');
@@ -73,7 +74,7 @@ const file = () => path.join(config.dataDir, 'state.json');
 function load(): Store {
   try {
     const raw = JSON.parse(fs.readFileSync(file(), 'utf8')) as Store;
-    if (raw?.deals?.length) return raw;
+    if (raw?.deals?.length) { raw.joinRequests ??= []; return raw; }
   } catch { /* first run */ }
   return seed();
 }

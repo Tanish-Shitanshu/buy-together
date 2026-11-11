@@ -31,10 +31,12 @@ export async function searchMarket(query: string, limit = 8): Promise<MarketItem
   return out;
 }
 
-export async function marketMedian(query: string): Promise<{ median: number; count: number } | null> {
+/** Middle shop price for a product. Only listings within 0.4x to 2.5x of our own benchmark count,
+ *  so a search that returns unrelated items (machines, bundles) never produces a number. */
+export async function marketMedian(query: string, around: number): Promise<{ median: number; count: number } | null> {
   try {
-    const items = await searchMarket(query, 12);
-    if (!items.length) return null;
+    const items = (await searchMarket(query, 12)).filter(i => i.price >= around * 0.4 && i.price <= around * 2.5);
+    if (items.length < 3) return null;
     const v = items.map(i => i.price).sort((a, b) => a - b);
     return { median: v[Math.floor(v.length / 2)], count: v.length };
   } catch (e) {

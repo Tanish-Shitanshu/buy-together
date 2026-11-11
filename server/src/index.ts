@@ -12,6 +12,7 @@ import { storyStep, storyRun, storyBusy } from './story';
 import { verifyWebhook } from './paypal';
 import { speechToText, textToSpeech } from './sarvam';
 import { runPause, pressureSpans } from './pause';
+import { mountMcp } from './mcp';
 
 const app = express();
 app.use(express.json({ limit: '200kb' }));
@@ -24,6 +25,13 @@ const wrap = (fn: (req: express.Request, res: express.Response) => Promise<unkno
       res.status(status).json({ error: e instanceof Error ? e.message : 'Something went wrong' });
     });
   };
+
+app.post('/api/join-requests/:id/:decision', wrap(async (req, res) => {
+  const d = req.params.decision;
+  if (d !== 'approve' && d !== 'decline') throw new UserError('Unknown answer', 404);
+  res.json(await engine.answerJoinRequest(req.params.id, d === 'approve' ? 'yes' : 'no', Boolean(req.body?.interactive)));
+}));
+mountMcp(app);
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 app.get('/api/state', (_req, res) => res.json(snapshot()));
