@@ -11,7 +11,7 @@ import { ask } from './assistant';
 import { storyStep, storyRun, storyBusy } from './story';
 import { verifyWebhook } from './paypal';
 import { speechToText, textToSpeech } from './sarvam';
-import { runPause, pressureSpans } from './pause';
+import { runPause, pressureSpans, checkText, messageVerdict } from './pause';
 import { mountMcp } from './mcp';
 
 const app = express();
@@ -127,7 +127,26 @@ app.post('/api/i18n', wrap(async (req, res) => {
 // Try Pause on any pasted seller message (used by the "Check a message" box).
 app.post('/api/pause/check-message', wrap(async (req, res) => {
   const text = String(req.body?.text ?? '').slice(0, 1000);
-  res.json({ highlights: pressureSpans(text) });
+  const highlights = await checkText(text);
+  res.json({ highlights, verdict: messageVerdict(highlights).status });
+}));
+
+/** Scores Pause's message check on the labelled sets in server/eval. `model=1` adds the model's pointers. */
+app.get('/api/pause/eval', wrap(async (req, res) => {
+  const set = String(req.query.set ?? 'holdout').replace(/[^a-z]/g, '');
+  const useModel = req.query.model === '1';
+  const rows: { text: string; risky: boolean }[] = JSON.parse(fs.readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname), '..', 'eval', `${set}.json`), 'utf8'));
+  const verdicts: ('pass' | 'warn' | 'fail')[] = new Array(rows.length);
+  let next = 0;
+  await Promise.all(Array.from({ length: 6 }, async () => {
+    while (next < rows.length) { const i = next++; verdicts[i] = messageVerdict(await checkText(rows[i].text, useModel)).status; }
+  }));
+  const m = (pred: (v: string) => boolean) => {
+    let tp = 0, fp = 0, fn = 0, tn = 0; const missed: string[] = [], alarms: string[] = [];
+    rows.forEach((r, i) => { const p = pred(verdicts[i]); if (r.risky && p) tp++; else if (r.risky) { fn++; missed.push(r.text); } else if (p) { fp++; alarms.push(r.text); } else tn++; });
+    return { precision: +(tp / Math.max(1, tp + fp)).toFixed(3), recall: +(tp / Math.max(1, tp + fn)).toFixed(3), falseAlarms: fp, missed: fn, missedText: missed, alarmText: alarms };
+  };
+  res.json({ set, model: useModel, messages: rows.length, flagged: m(v => v !== 'pass'), blocked: m(v => v === 'fail') });
 }));
 
 app.post('/api/stt', express.raw({ type: () => true, limit: '8mb' }), wrap(async (req, res) => {

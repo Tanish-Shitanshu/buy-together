@@ -1,0 +1,322 @@
+[
+ {
+  "text": "Only today! 1000 cans at $0.38, pay 50% advance to my personal UPI id. No refunds.",
+  "risky": true
+ },
+ {
+  "text": "Last chance, offer ends in 2 hours. Send payment to our personal account first, 100% genuine.",
+  "risky": true
+ },
+ {
+  "text": "Hurry, limited stock. Pay upfront by bank transfer to this number and I will ship tomorrow, trust me.",
+  "risky": true
+ },
+ {
+  "text": "Price is only valid right now. Pay advance via gift card, final sale, cannot cancel.",
+  "risky": true
+ },
+ {
+  "text": "Sir this is guaranteed lowest rate. Send money to my UPI ID, non-refundable.",
+  "risky": true
+ },
+ {
+  "text": "Act now! Western Union the advance and goods reach you in 3 days. Risk free.",
+  "risky": true
+ },
+ {
+  "text": "We accept crypto only, pay first, no refunds. Believe me, 100% safe.",
+  "risky": true
+ },
+ {
+  "text": "Deal ends tonight. Please pay outside the app so we can skip fees, trust me.",
+  "risky": true
+ },
+ {
+  "text": "Pay directly to my personal number and I give you a special discount. Offer ends in 30 minutes.",
+  "risky": true
+ },
+ {
+  "text": "Final sale. Advance payment needed within 1 hour or the stock goes to another buyer.",
+  "risky": true
+ },
+ {
+  "text": "Bhai only today ka rate hai, advance bhej do personal UPI pe, no refund.",
+  "risky": true
+ },
+ {
+  "text": "Limited stock bacha hai, hurry karo, pay first on my account, 100% genuine maal.",
+  "risky": true
+ },
+ {
+  "text": "Guaranteed delivery, just send advance to this bank account. Non-refundable though.",
+  "risky": true
+ },
+ {
+  "text": "Right now I can give half price but you must pay off-platform. Trust me, I am genuine.",
+  "risky": true
+ },
+ {
+  "text": "Send gift card codes as advance and I will dispatch immediately. No refunds.",
+  "risky": true
+ },
+ {
+  "text": "Last chance to book. Upfront transfer to my personal account only. Cannot cancel after.",
+  "risky": true
+ },
+ {
+  "text": "Offer ends in 1 hour. Pay before dispatch by crypto. 100% guaranteed.",
+  "risky": true
+ },
+ {
+  "text": "Special rate only for you, pay advance outside the platform, final sale.",
+  "risky": true
+ },
+ {
+  "text": "Hurry up! Pay directly to my UPI id now, risk-free deal, believe me.",
+  "risky": true
+ },
+ {
+  "text": "This price will not come again. Pay first, no refunds, 100% safe.",
+  "risky": true
+ },
+ {
+  "text": "Stock is limited, act now. Western Union advance please. Non refundable.",
+  "risky": true
+ },
+ {
+  "text": "Send money to my personal account today only and I add 100 free cans. Trust me.",
+  "risky": true
+ },
+ {
+  "text": "We need advance within 2 hours, payment off platform, otherwise offer ends.",
+  "risky": true
+ },
+ {
+  "text": "Only for the next 30 minutes: pay upfront via bank transfer to my number. Guaranteed.",
+  "risky": true
+ },
+ {
+  "text": "Pay first, ship later. Final sale. Offer ends tonight.",
+  "risky": true
+ },
+ {
+  "text": "Please send the advance to my personal UPI. It is risk free, believe me. No refunds.",
+  "risky": true
+ },
+ {
+  "text": "Hurry, last chance! Payment outside the app gets you 20% off. Trust me.",
+  "risky": true
+ },
+ {
+  "text": "Guaranteed lowest price, pay advance now, cannot cancel once paid.",
+  "risky": true
+ },
+ {
+  "text": "Right now only: crypto payment and I deliver tomorrow. 100% genuine, no refund.",
+  "risky": true
+ },
+ {
+  "text": "Limited stock. Transfer upfront to this bank account, offer ends in 3 hours.",
+  "risky": true
+ },
+ {
+  "text": "Bhai personal account me advance daal do, aaj hi ka offer hai, no refunds.",
+  "risky": true
+ },
+ {
+  "text": "Act now, pay before dispatch, final sale, trust me I am genuine.",
+  "risky": true
+ },
+ {
+  "text": "Please pay directly, I will not use the app, it is 100% safe. Offer ends today.",
+  "risky": true
+ },
+ {
+  "text": "Send payment to my personal number now. Non-refundable. Hurry.",
+  "risky": true
+ },
+ {
+  "text": "Gift card or crypto advance only, last chance for this rate.",
+  "risky": true
+ },
+ {
+  "text": "Pay upfront and get free delivery, only today, no refunds, guaranteed.",
+  "risky": true
+ },
+ {
+  "text": "Offer ends in 45 minutes. Please pay advance to my personal UPI id.",
+  "risky": true
+ },
+ {
+  "text": "Final sale, cannot cancel. Send money first, believe me it is risk free.",
+  "risky": true
+ },
+ {
+  "text": "Limited stock, right now only, pay off-platform to lock the price.",
+  "risky": true
+ },
+ {
+  "text": "Trust me, 100% safe. Advance by Western Union and goods are yours, no refunds.",
+  "risky": true
+ },
+ {
+  "text": "We can supply 1000 cans at $0.70 each, delivered within 5 working days. Payment through the held deal on delivery.",
+  "risky": false
+ },
+ {
+  "text": "Thank you for the order. Our rate for 600 cans is $0.78. Invoice will follow after dispatch.",
+  "risky": false
+ },
+ {
+  "text": "Happy to confirm 1530 cans at $0.64. Delivery to your shop address, payment only after the group agrees.",
+  "risky": false
+ },
+ {
+  "text": "Our trade licence number is attached. Prices are valid for one week.",
+  "risky": false
+ },
+ {
+  "text": "We can offer a small discount if you take the full quantity. Let us know what works for you.",
+  "risky": false
+ },
+ {
+  "text": "Delivery will be on Monday morning. Please keep someone at the shop to receive the cartons.",
+  "risky": false
+ },
+ {
+  "text": "The cans are 330 ml, 24 per carton. Batch details are printed on each carton.",
+  "risky": false
+ },
+ {
+  "text": "We have stock of both plain and lemon flavours. Which would you like?",
+  "risky": false
+ },
+ {
+  "text": "Our best price for this quantity is $0.66. Payment is released only when you confirm delivery.",
+  "risky": false
+ },
+ {
+  "text": "Please share the delivery address and a contact number for the driver.",
+  "risky": false
+ },
+ {
+  "text": "Aapka order mil gaya hai. Hum 5 din me deliver kar denge, payment platform ke through hi hoga.",
+  "risky": false
+ },
+ {
+  "text": "Rate 0.70 dollar per can hai, 1000 cans ke liye. Delivery ka kharcha hamare upar.",
+  "risky": false
+ },
+ {
+  "text": "We can hold this price until Friday if that helps your group decide.",
+  "risky": false
+ },
+ {
+  "text": "Quality certificates are attached. You are welcome to inspect the first carton before accepting.",
+  "risky": false
+ },
+ {
+  "text": "Our return policy: damaged cartons can be returned within 7 days of delivery.",
+  "risky": false
+ },
+ {
+  "text": "Thank you for waiting. The warehouse confirmed the stock for your quantity.",
+  "risky": false
+ },
+ {
+  "text": "We would need the final quantity by Thursday so that we can plan the truck.",
+  "risky": false
+ },
+ {
+  "text": "The price includes delivery within the city. Outside the city there is a small extra charge.",
+  "risky": false
+ },
+ {
+  "text": "Kindly confirm the quantity and we will send a formal quotation.",
+  "risky": false
+ },
+ {
+  "text": "We are a registered distributor and have supplied several shops in your area.",
+  "risky": false
+ },
+ {
+  "text": "Can you tell me the delivery date that suits your group best?",
+  "risky": false
+ },
+ {
+  "text": "The cartons are sealed and stacked on pallets. Unloading takes about an hour.",
+  "risky": false
+ },
+ {
+  "text": "Our rate card is the same for all groups. The more you buy, the lower the price.",
+  "risky": false
+ },
+ {
+  "text": "We accept payment only through the platform, on the day of delivery.",
+  "risky": false
+ },
+ {
+  "text": "Sorry for the delay in reply. Here is the updated quotation for 600 cans at $0.78.",
+  "risky": false
+ },
+ {
+  "text": "Please note that the cans should be stored in a cool place.",
+  "risky": false
+ },
+ {
+  "text": "If any can is damaged on arrival, we will replace it without any charge.",
+  "risky": false
+ },
+ {
+  "text": "We offer a three percent discount if the group confirms the order by Friday.",
+  "risky": false
+ },
+ {
+  "text": "Our driver will call you thirty minutes before arriving.",
+  "risky": false
+ },
+ {
+  "text": "We would be glad to supply your group again next month at the same rate.",
+  "risky": false
+ },
+ {
+  "text": "Bhai delivery Tuesday tak ho jayegi, payment delivery ke baad hi lenge.",
+  "risky": false
+ },
+ {
+  "text": "The invoice will carry our tax number and your shop name.",
+  "risky": false
+ },
+ {
+  "text": "We can also supply 500 ml bottles if your group is interested.",
+  "risky": false
+ },
+ {
+  "text": "Thank you for choosing us. We will keep the group updated on the dispatch.",
+  "risky": false
+ },
+ {
+  "text": "The agreed price is $0.64 per can for 1530 cans, as discussed.",
+  "risky": false
+ },
+ {
+  "text": "Our office is open Monday to Saturday, nine to six.",
+  "risky": false
+ },
+ {
+  "text": "Please confirm that all shops will be open to receive the delivery on Wednesday.",
+  "risky": false
+ },
+ {
+  "text": "We can split the delivery in two trucks if one address cannot take all cartons.",
+  "risky": false
+ },
+ {
+  "text": "The batch was packed last week, so the expiry date is well over a year away.",
+  "risky": false
+ },
+ {
+  "text": "You are free to check our reviews with other shops before you decide.",
+  "risky": false
+ }
+]

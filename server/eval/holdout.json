@@ -1,0 +1,322 @@
+[
+ {
+  "text": "I have only one carton set left at this price, so if you want it, transfer the money to my wallet before noon.",
+  "risky": true
+ },
+ {
+  "text": "Our bank is down today. Please use my brother's PhonePe number and send a screenshot after.",
+  "risky": true
+ },
+ {
+  "text": "If you pay by cash at our shop today, I will add ten extra cartons for free.",
+  "risky": true
+ },
+ {
+  "text": "I will message you a link where you can enter your net banking details to finish the booking.",
+  "risky": true
+ },
+ {
+  "text": "To release the lorry I need the OTP that comes on your phone, please read it out.",
+  "risky": true
+ },
+ {
+  "text": "Hello dear, this is a golden chance. Send the amount in dollars via Wise to my personal profile.",
+  "risky": true
+ },
+ {
+  "text": "Pay me by Zelle and I will treat you as my priority customer, the order will leave tonight.",
+  "risky": true
+ },
+ {
+  "text": "We cannot wait for the whole group. Send your share to me directly and I will ship to you first.",
+  "risky": true
+ },
+ {
+  "text": "Sorry the platform keeps failing for me, can you please just do an IMPS to my account?",
+  "risky": true
+ },
+ {
+  "text": "There is a hidden clearance fee at the port, pay it to my agent's UPI or the goods will be seized.",
+  "risky": true
+ },
+ {
+  "text": "This lot goes to the next buyer in thirty minutes. Make a transfer and send me the receipt.",
+  "risky": true
+ },
+ {
+  "text": "Do not mention this price on the group chat. Pay me a small booking amount and it is yours.",
+  "risky": true
+ },
+ {
+  "text": "My boss is angry, so I will give you a big discount if you pay straight to my personal account right now.",
+  "risky": true
+ },
+ {
+  "text": "The promotional price ends at five this evening. Deposit to the account below, rest on arrival.",
+  "risky": true
+ },
+ {
+  "text": "Aap abhi paisa bhej do mere number pe, kal subah tak maal pahunch jayega, tension mat lo.",
+  "risky": true
+ },
+ {
+  "text": "Bhai platform ka chakkar chodo, seedha mere account me daal do, rate aur kam kar dunga.",
+  "risky": true
+ },
+ {
+  "text": "Trust me brother I have done this for years, nobody ever complained. Just send the advance first.",
+  "risky": true
+ },
+ {
+  "text": "We can only sell at this rate against full prepayment, and prepaid amounts cannot be returned.",
+  "risky": true
+ },
+ {
+  "text": "You need to buy a verification token worth 100 dollars before we can talk about your order.",
+  "risky": true
+ },
+ {
+  "text": "Please screenshot your wallet balance and send it so I know you are serious, then pay.",
+  "risky": true
+ },
+ {
+  "text": "Everything is 100 percent legal, we have all the papers. Send half the money in advance to my account.",
+  "risky": true
+ },
+ {
+  "text": "My sister handles the money. Please transfer to her account and I will update the invoice later.",
+  "risky": true
+ },
+ {
+  "text": "I will hold your order for just two more hours, after that it is gone. Please send the deposit.",
+  "risky": true
+ },
+ {
+  "text": "Use this other website to pay, it is faster than the platform, here is the address.",
+  "risky": true
+ },
+ {
+  "text": "I need your online banking username so I can check that you are a genuine shop owner.",
+  "risky": true
+ },
+ {
+  "text": "This rate is a loss for me, so I can only do it if you pay in cash to my driver now.",
+  "risky": true
+ },
+ {
+  "text": "We are a government approved supplier. Pay by gift card to clear the registration with the ministry.",
+  "risky": true
+ },
+ {
+  "text": "If you pay in crypto I give 30 percent off, it is much safer for both of us.",
+  "risky": true
+ },
+ {
+  "text": "Pay first and I will send the video of your goods being loaded, that is how I work with everyone.",
+  "risky": true
+ },
+ {
+  "text": "The order is blocked unless you pay a release charge to this number, urgent please.",
+  "risky": true
+ },
+ {
+  "text": "Our offer finishes at midnight. Book with a small amount on my personal paytm and thank me later.",
+  "risky": true
+ },
+ {
+  "text": "Customer, your parcel is stuck. Pay the handling charge on this link right now to avoid cancellation.",
+  "risky": true
+ },
+ {
+  "text": "I am travelling so my accountant is not in office, please pay on my number only, never mind the platform.",
+  "risky": true
+ },
+ {
+  "text": "Last few cartons, nobody else knows about this stock. Send me the payment and keep quiet about it.",
+  "risky": true
+ },
+ {
+  "text": "Kal tak rate badh jayega, abhi mere account me paisa transfer kar do aur screenshot bhejo.",
+  "risky": true
+ },
+ {
+  "text": "Only prepaid orders can be done at this price, we do not do refunds on prepaid goods.",
+  "risky": true
+ },
+ {
+  "text": "Share the PIN of your card to confirm your identity, then I will give the best price.",
+  "risky": true
+ },
+ {
+  "text": "As a special favour I am giving you the lowest rate of my life. Pay today by direct deposit.",
+  "risky": true
+ },
+ {
+  "text": "There are ten shops waiting. Whoever pays first to my account gets the stock.",
+  "risky": true
+ },
+ {
+  "text": "Pay now through the QR in this picture and the deal is locked, no changes after that.",
+  "risky": true
+ },
+ {
+  "text": "We keep our rate card open to everyone. No special treatment for anyone and no pressure to decide today.",
+  "risky": false
+ },
+ {
+  "text": "The batch number and the expiry date are printed on every can, and we send photos before dispatch.",
+  "risky": false
+ },
+ {
+  "text": "You can pay by card or bank through the platform. We never ask for payment on our own number.",
+  "risky": false
+ },
+ {
+  "text": "If the group needs more time, we are happy to wait until next week. The price stays the same.",
+  "risky": false
+ },
+ {
+  "text": "Please share the exact shop address so the driver can find it, a Google map pin would help.",
+  "risky": false
+ },
+ {
+  "text": "I would suggest you check our trade licence, which is attached to this message.",
+  "risky": false
+ },
+ {
+  "text": "We have a guaranteed minimum order of 300 cans for each shop, anything below that is not possible.",
+  "risky": false
+ },
+ {
+  "text": "Our delivery window is between nine and twelve. The driver will call you from the gate.",
+  "risky": false
+ },
+ {
+  "text": "We have received your quantity and rate confirmation and will start packing tomorrow.",
+  "risky": false
+ },
+ {
+  "text": "The warehouse is closed on Sunday, so the earliest dispatch is Monday morning.",
+  "risky": false
+ },
+ {
+  "text": "Thank you. For the record, our price includes all taxes, and there are no extra charges at delivery.",
+  "risky": false
+ },
+ {
+  "text": "Hello, I wanted to confirm that the two pallets will be unloaded by your staff at the shop.",
+  "risky": false
+ },
+ {
+  "text": "Aapke group ka order confirm hai. Delivery Monday ko hogi, payment platform se hi release hoga.",
+  "risky": false
+ },
+ {
+  "text": "Bhai quantity thodi kam hai, agar do shops aur jud jaye to rate 0.70 pe aa jayega.",
+  "risky": false
+ },
+ {
+  "text": "Agar koi can kharab nikla to hum bina kisi sawaal ke badal denge.",
+  "risky": false
+ },
+ {
+  "text": "The offer applies to all groups of 1000 cans or more, it is not a personal discount.",
+  "risky": false
+ },
+ {
+  "text": "Our terms say that money is paid only after the goods are received and checked.",
+  "risky": false
+ },
+ {
+  "text": "We can only deliver in the evening hours because of city traffic rules for trucks.",
+  "risky": false
+ },
+ {
+  "text": "Dear customer, your order confirmation is attached. No action is required from your side.",
+  "risky": false
+ },
+ {
+  "text": "The truck number is on the invoice. Please check that the seal on the doors is intact when it arrives.",
+  "risky": false
+ },
+ {
+  "text": "We are happy to provide references from three shops near you that have bought from us.",
+  "risky": false
+ },
+ {
+  "text": "This is the final quotation for 1530 cans. The quantity and price are as per the rate card.",
+  "risky": false
+ },
+ {
+  "text": "Your group has reached the 600 mark, so the rate drops to 0.78 for everyone, including earlier joiners.",
+  "risky": false
+ },
+ {
+  "text": "You do not need to send anything to us directly. The platform keeps the money safe until delivery.",
+  "risky": false
+ },
+ {
+  "text": "Our warehouse manager will be on site until six, you can visit anytime before that.",
+  "risky": false
+ },
+ {
+  "text": "Let me know if one of the shops wants a smaller delivery, we can split the order.",
+  "risky": false
+ },
+ {
+  "text": "Please do not hesitate to ask if you need anything else before the order.",
+  "risky": false
+ },
+ {
+  "text": "We can arrange a call on Friday if your group has more questions about the cans.",
+  "risky": false
+ },
+ {
+  "text": "It is a limited run product, but we have enough for your whole group.",
+  "risky": false
+ },
+ {
+  "text": "Prices are updated every Monday in our public rate card, so this quote holds until then.",
+  "risky": false
+ },
+ {
+  "text": "The product carries a one year shelf life, and we give two weeks of free replacement for defects.",
+  "risky": false
+ },
+ {
+  "text": "We never ask for advance. If someone asks you for it in our name, please report it to us.",
+  "risky": false
+ },
+ {
+  "text": "The invoice will be issued by our company and will list your shop name and tax id.",
+  "risky": false
+ },
+ {
+  "text": "If you need extra cartons, tell us by Wednesday and we will add them at the same rate.",
+  "risky": false
+ },
+ {
+  "text": "The offer on lemon flavour is the same as on plain, there is no price difference.",
+  "risky": false
+ },
+ {
+  "text": "This price is valid for one week, you have time to talk to the other shop owners.",
+  "risky": false
+ },
+ {
+  "text": "Kindly send the delivery contact name, we will pass it on to the driver.",
+  "risky": false
+ },
+ {
+  "text": "We will confirm the dispatch by message and share a tracking link to follow the truck.",
+  "risky": false
+ },
+ {
+  "text": "Sorry about the earlier mix up, the quotation now has the correct total for 1530 cans.",
+  "risky": false
+ },
+ {
+  "text": "Hum aapko ek hafte tak ka time dete hain, koi jaldi nahi hai.",
+  "risky": false
+ }
+]

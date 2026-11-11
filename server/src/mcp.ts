@@ -1,6 +1,6 @@
 import type express from 'express';
 import { store, getDeal, tierFor, heldQty } from './store';
-import { pressureSpans, runPause } from './pause';
+import { checkText, messageVerdict } from './pause';
 import * as engine from './engine';
 
 /** A small MCP server (JSON-RPC over HTTP) so any agent can read deals, test a seller's message with
@@ -39,9 +39,9 @@ async function call(name: string, a: any): Promise<unknown> {
     }
     case 'check_message': {
       const text = String(a.text ?? '');
-      const spans = pressureSpans(text);
-      const kinds = [...new Set(spans.map(s => s.label))];
-      return { safe: kinds.length < 2, found: spans.map(s => ({ text: text.slice(s.start, s.end), kind: s.label })), advice: kinds.length >= 2 ? 'Do not pay. This looks like pressure plus payment outside the held deal.' : kinds.length ? 'Some pressure wording. Ask for proof before paying.' : 'No pressure wording found.' };
+      const spans = await checkText(text);
+      const { status, kinds } = messageVerdict(spans);
+      return { verdict: status, safe: status === 'pass', found: spans.map(s => ({ text: text.slice(s.start, s.end), kind: s.label })), advice: status === 'fail' ? 'Do not pay. This asks for money outside the held deal, for card or login details, or pushes in several ways at once.' : status === 'warn' ? 'Some pressure wording. Ask for proof before paying.' : 'No pressure wording found.' };
     }
     case 'check_seller': {
       const k = String(a.name ?? '').trim().toLowerCase();
