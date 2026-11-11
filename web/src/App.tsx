@@ -3,6 +3,7 @@ import { post, useAppState } from './api';
 import { useT } from './i18n';
 import { Hero } from './components/Hero';
 import { OrderBook } from './components/OrderBook';
+import { Ledger } from './components/Ledger';
 import { JoinPanel, Negotiation, Receipt, Review } from './components/Stage';
 import { BottomPanel, TopPanel } from './components/SidePanels';
 import { NewDeal } from './components/NewDeal';
@@ -81,6 +82,7 @@ export function App() {
           {deal.status === 'cancelled' && <section className="card"><h2>{t('cancel.title')}</h2></section>}
           {deal.quotes.length > 0 && <Negotiation state={state} deal={deal} />}
           <OrderBook state={state} dealId={deal.id} />
+          <Ledger state={state} dealId={deal.id} />
         </main>
         <aside className="side">
           <TopPanel state={state} deal={deal} viewAs={viewAs} lang={lang} act={act} />

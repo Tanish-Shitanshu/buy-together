@@ -15,7 +15,24 @@ import { runPause, pressureSpans, checkText, messageVerdict } from './pause';
 import { mountMcp } from './mcp';
 
 const app = express();
+app.set('trust proxy', 1);
 app.use(express.json({ limit: '200kb' }));
+
+/** Small per-address limiter so the paid language and voice calls cannot be run up by anyone. */
+function limit(max: number, windowMs: number) {
+  const hits = new Map<string, number[]>();
+  return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const now = Date.now(), k = req.ip ?? 'x';
+    const recent = (hits.get(k) ?? []).filter(t => now - t < windowMs);
+    if (recent.length >= max) return res.status(429).json({ error: 'Too many requests. Please wait a moment and try again.' });
+    recent.push(now); hits.set(k, recent);
+    if (hits.size > 5000) for (const [key, v] of hits) if (!v.some(t => now - t < windowMs)) hits.delete(key);
+    next();
+  };
+}
+app.use('/api', limit(240, 60_000));
+app.use(['/api/stt', '/api/tts', '/api/i18n', '/api/assistant', '/api/chat', '/api/pause/check-message', '/mcp'], limit(60, 60_000));
+app.use('/api/pause/eval', limit(6, 60_000));
 
 const wrap = (fn: (req: express.Request, res: express.Response) => Promise<unknown>) =>
   (req: express.Request, res: express.Response) => {
@@ -138,11 +155,6 @@ app.post('/api/pause/check-message', wrap(async (req, res) => {
 }));
 
 /** Scores Pause's message check on the labelled sets in server/eval. `model=1` adds the model's pointers. */
-app.get('/api/pause/model-raw', wrap(async (req, res) => {
-  const { llm } = await import('./llm');
-  const raw = await llm({ system: 'Reply with JSON only: {"flags":[{"kind":"Pays outside the held deal","phrase":"<exact words>"}]} for any wording in the message that asks for payment outside the platform. Otherwise {"flags":[]}.', user: String(req.query.text ?? '').slice(0, 500), fast: true, maxTokens: 1200 });
-  res.json({ raw });
-}));
 app.get('/api/pause/eval', wrap(async (req, res) => {
   const set = String(req.query.set ?? 'holdout').replace(/[^a-z]/g, '');
   const useModel = req.query.model === '1';
