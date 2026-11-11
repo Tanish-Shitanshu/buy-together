@@ -13,7 +13,7 @@ Record the live site in one browser window. No music. Keep the PayPal approval p
 | 1:55 | Review panel: each buyer's yes, family helper box, copy link | "Each buyer says yes. Ravi asks his mother to check first. She opens a link and hears the deal in Haryanvi." |
 | 2:10 | Undo bar counting down, Pay now, receipt with saved total | "There is an Undo window before any money moves. Then PayPal captures each buyer's exact share, and releases the rest. The group saved six hundred and twenty seven dollars." |
 | 2:25 | Delivery day board, drag a stop | "Munim also plans the delivery truck. Drag a stop to change the time." |
-| 2:35 | Order book (AG Grid), New deal with Channel3 shop prices | "Start a deal for anything. Real shop prices come from Channel3." |
+| 2:35 | Order book and PayPal ledger (AG Grid), Invite on WhatsApp, New deal with Channel3 prices | "Every hold, spend and refund is in one live ledger. Invite shops with a link. Start a deal for anything, with real shop prices from Channel3." |
 | 2:45 | Close on hero | "Buy Together. Buy together. Pay safely." |
 
 Checklist before recording: Reset demo, set viewing as Ravi, language Haryanvi, PayPal sandbox buyer logged in on the same browser.
