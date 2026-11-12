@@ -185,11 +185,16 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     const key = `bt-i18n-v1-${lang}`;
     try { const c = localStorage.getItem(key); if (c) setDict(JSON.parse(c)); } catch { /* none */ }
     let live = true;
-    post<Record<string, string>>('/api/i18n', { lang, strings: STR }).then(d => {
-      if (!live) return;
-      setDict(d);
-      try { localStorage.setItem(key, JSON.stringify(d)); } catch { /* full */ }
-    }).catch(() => { /* keep English */ });
+    const load = (tries: number) => {
+      post<Record<string, string>>('/api/i18n', { lang, strings: STR }).then(d => {
+        if (!live) return;
+        const { __pending, ...rest } = d;
+        setDict(rest);
+        if (__pending && tries < 12) { setTimeout(() => { if (live) load(tries + 1); }, 800); return; }
+        try { localStorage.setItem(key, JSON.stringify(rest)); } catch { /* full */ }
+      }).catch(() => { /* keep English */ });
+    };
+    load(0);
     return () => { live = false; };
   }, [lang]);
 

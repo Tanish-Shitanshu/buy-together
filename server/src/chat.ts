@@ -69,15 +69,16 @@ let cache: Record<string, Record<string, string>> = {};
 try { cache = JSON.parse(fs.readFileSync(cacheFile, 'utf8')); } catch { /* none yet */ }
 const saveCache = () => { try { fs.mkdirSync(config.dataDir, { recursive: true }); fs.writeFileSync(cacheFile, JSON.stringify(cache)); } catch { /* ignore */ } };
 
-export async function translateStrings(lang: LangCode, strings: Record<string, string>): Promise<Record<string, string>> {
+export async function translateStrings(lang: LangCode, strings: Record<string, string>, budgetMs = 20000): Promise<Record<string, string>> {
   if (lang === 'en') return strings;
   const have = (cache[lang] ??= {});
   const missing = Object.entries(strings).filter(([k, v]) => have[`${k}|${v}`] === undefined);
   if (sarvamOn()) {
     // Placeholders like {n} become numbers the translator leaves alone, then are put back. If any is lost, keep English.
     const todo = [...missing];
+    const until = Date.now() + budgetMs;
     const worker = async () => {
-      for (let it = todo.pop(); it; it = todo.pop()) {
+      for (let it = todo.pop(); it; it = Date.now() < until ? todo.pop() : undefined) {
         const [k, v] = it;
         const holders: string[] = [];
         const masked = v.replace(/\{(\w+)\}/g, (_m, name) => { holders.push(name); return String(7000 + holders.length); });
@@ -92,7 +93,9 @@ export async function translateStrings(lang: LangCode, strings: Record<string, s
     await Promise.all(Array.from({ length: 4 }, worker));
     if (missing.length) saveCache();
     const res: Record<string, string> = {};
-    for (const [k, v] of Object.entries(strings)) res[k] = have[`${k}|${v}`] ?? v;
+    let pending = 0;
+    for (const [k, v] of Object.entries(strings)) { res[k] = have[`${k}|${v}`] ?? v; if (have[`${k}|${v}`] === undefined) pending++; }
+    if (pending) res.__pending = String(pending);
     return res;
   }
   const BATCH = 40;
