@@ -2,6 +2,8 @@ import { config, SARVAM_CODE } from './config';
 
 const BASE = 'https://api.sarvam.ai';
 const key = () => ({ 'api-subscription-key': config.ai.sarvamKey });
+/** Last problem seen from the language service (status and a short message, never keys). For health checks. */
+export const sarvamLast: { at?: number; status?: number; msg?: string } = {};
 export const sarvamOn = () => Boolean(config.ai.sarvamKey);
 
 /** Text translation (Mayura, spoken style). Returns null on any failure. */
@@ -21,6 +23,7 @@ export async function translateText(text: string, from: string, to: string): Pro
         }),
         signal: AbortSignal.timeout(15000),
       });
+      if (!r.ok) { sarvamLast.at = Date.now(); sarvamLast.status = r.status; sarvamLast.msg = (await r.clone().text()).slice(0, 200); }
       if (r.status === 429 || r.status >= 500) {
         // Busy: wait a little longer each time, then try again.
         const wait = Number(r.headers.get('retry-after')) * 1000 || 700 * (attempt + 1) + Math.random() * 400;

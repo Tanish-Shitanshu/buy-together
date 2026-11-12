@@ -1,3 +1,4 @@
+import { sarvamLast } from './sarvam';
 import express from 'express';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -50,7 +51,7 @@ app.post('/api/join-requests/:id/:decision', wrap(async (req, res) => {
 }));
 mountMcp(app);
 
-app.get('/api/health', (_req, res) => res.json({ ok: true }));
+app.get('/api/health', (_req, res) => res.json({ ok: true, languageService: sarvamLast.at ? { ...sarvamLast, agoSec: Math.round((Date.now() - sarvamLast.at) / 1000) } : 'ok' }));
 app.get('/api/state', (_req, res) => res.json(snapshot()));
 app.get('/api/config', (_req, res) => res.json(snapshot().config));
 app.get('/api/scam-list', (_req, res) => res.json(store.scamList));
