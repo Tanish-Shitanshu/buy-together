@@ -12,7 +12,8 @@ Small shop owners pay shop prices for goods that distributors sell far cheaper i
 - Pause checks every offer before money moves: price against the market, seller identity and a shared warning list, pressure and off-platform payment wording, hold coverage, group size and limits. It blocks bad offers with the exact words highlighted.
 - Every buyer approves the final price. A family helper can be asked to check first, and hears the deal in their own language. An Undo window stays open before capture.
 - PayPal captures each buyer's exact share and releases the rest of each hold. If any buyer says no, nothing is captured.
-- The whole app, the group chat and the assistant work in ten Indian languages by text and voice. Messages are translated for each reader.
+- The whole app and the group chat work in ten Indian languages. Messages are translated for each reader.
+- Ronnie is a small voice assistant that follows your cursor. Say its name in your own language and it answers in that language, in text and, if you want, in a spoken voice. It explains the deal and suggests the next step, but every payment stays a button you press.
 - Munim plans the delivery truck on a drag-and-drop board. Any buyer can start a new deal, with real shop prices from Channel3.
 - Other agents can join through an MCP server. They can read deals and check seller messages, and can only ask to join. The buyer must approve before any money is held.
 

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import type { AppState, AssistantReply, ChatMessage, Deal } from '../../../shared/types';
+import type { AppState, ChatMessage, Deal } from '../../../shared/types';
 import { useT } from '../i18n';
 import { post } from '../api';
-import { speak, stopSpeaking, useListen } from './voice';
+import { useListen } from './voice';
 import { Checks } from './Stage';
 
 type Act = (fn: () => Promise<unknown>) => Promise<void>;
@@ -72,79 +72,15 @@ function Chat({ state, deal, viewAs, lang, act }: { state: AppState; deal: Deal;
   );
 }
 
-/* ---------- Munim: ask in your language ---------- */
-interface Turn { who: 'me' | 'bot'; text: string; suggest?: AssistantReply['suggest'] }
-
-function Assistant({ state, deal, viewAs, lang, act }: { state: AppState; deal: Deal; viewAs: string; lang: string; act: Act }) {
-  const { t } = useT();
-  const [turns, setTurns] = useState<Turn[]>([]);
-  const [text, setText] = useState('');
-  const [busy, setBusy] = useState(false);
-  const [aloud, setAloud] = useState(true);
-  const end = useEnd(turns.length);
-  const l = state.config.languages.find(x => x.code === lang);
-  const speech = l?.speech ?? 'en-IN';
-  const mine = state.commitments.find(c => c.dealId === deal.id && c.buyerId === viewAs && c.status === 'held');
-
-  const ask = async (q: string) => {
-    const v = q.trim();
-    if (!v || busy) return;
-    setText(''); setBusy(true);
-    setTurns(x => [...x, { who: 'me', text: v }]);
-    try {
-      const r = await post<AssistantReply>('/api/assistant', { dealId: deal.id, buyerId: viewAs, text: v, lang });
-      setTurns(x => [...x, { who: 'bot', text: r.reply, suggest: r.suggest }]);
-      if (aloud) speak(r.reply, r.lang, state.config.languages.find(z => z.code === r.lang)?.speech ?? speech, state.config.aiMode === 'live');
-    } catch (e) {
-      setTurns(x => [...x, { who: 'bot', text: (e as Error).message }]);
-    } finally { setBusy(false); }
-  };
-
-  const doIt = (a: NonNullable<AssistantReply['suggest']>['action']) => {
-    if (a === 'approve' && mine) return act(() => post(`/api/commitments/${mine.id}/approve`, { decision: 'yes' }));
-    if (a === 'reject' && mine) return act(() => post(`/api/commitments/${mine.id}/approve`, { decision: 'no' }));
-    if (a === 'withdraw' && mine) return act(() => post(`/api/commitments/${mine.id}/withdraw`));
-    if (a === 'negotiate') return act(() => post(`/api/deals/${deal.id}/negotiate`));
-    if (a === 'join') document.getElementById('join-panel')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  return (
-    <>
-      <div className="scroll" ref={end}>
-        <p className="muted">{t('ask.hi')}</p>
-        <div className="chips">
-          {(['ask.q1', 'ask.q2', 'ask.q3'] as const).map(k => <button key={k} className="chip" onClick={() => ask(t(k))}>{t(k)}</button>)}
-        </div>
-        {turns.map((m, i) => (
-          <div key={i} className={`bubble${m.who === 'me' ? ' me' : ' agent'}`}>
-            <div>{m.text}</div>
-            {m.suggest && <div style={{ marginTop: 6 }}><button className="btn sm" onClick={() => doIt(m.suggest!.action)}>{t('ask.do')}: {m.suggest.label}</button></div>}
-          </div>
-        ))}
-        {busy && <div className="bubble agent muted">…</div>}
-      </div>
-      <div className="composer">
-        <input type="text" value={text} placeholder={t('ask.ph')} onChange={e => setText(e.target.value)} onKeyDown={e => e.key === 'Enter' && ask(text)} lang={lang} />
-        <Mic lang={lang} speechLang={speech} server={state.config.aiMode === 'live'} onText={v => { setText(v); }} />
-        <button className="btn sm" disabled={busy} onClick={() => ask(text)}>{t('chat.send')}</button>
-      </div>
-      <label className="row" style={{ padding: '0 14px 10px', gap: 8, fontSize: 13 }}>
-        <input type="checkbox" checked={aloud} onChange={e => { setAloud(e.target.checked); if (!e.target.checked) stopSpeaking(); }} />{t('ask.speak')}
-      </label>
-    </>
-  );
-}
-
 export function TopPanel(props: { state: AppState; deal: Deal; viewAs: string; lang: string; act: Act }) {
   const { t } = useT();
   const [tab, setTab] = useState<'chat' | 'ask'>('chat');
   return (
     <section className="card panel">
       <div className="tabs" role="tablist">
-        <button role="tab" aria-selected={tab === 'chat'} onClick={() => setTab('chat')}>{t('chat.tab')}</button>
-        <button role="tab" aria-selected={tab === 'ask'} onClick={() => setTab('ask')}>{t('ask.tab')}</button>
+        <button role="tab" aria-selected="true">{t('chat.tab')}</button>
       </div>
-      {tab === 'chat' ? <Chat {...props} /> : <Assistant {...props} />}
+      <Chat {...props} />
     </section>
   );
 }

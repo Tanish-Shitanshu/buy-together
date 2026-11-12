@@ -15,7 +15,8 @@ Live demo: https://buy-together-v008.onrender.com
 Rule for the code: models read, write and translate. Plain code decides every price and every payment.
 
 ## Features
-- Ten languages in the app, group chat (messages translated for each reader), assistant, voice in and out.
+- Ten languages in the app and group chat (messages translated for each reader).
+- Ronnie, a voice assistant that follows the cursor. Call its name in any app language (for example "Ronnie, इस डील में मेरा हिस्सा कितना है?") and it answers in the same language, as text and, if you switch speech on, as voice. A speaker switch and a Stop button control the audio. Ronnie explains and suggests; every payment is still a button you press.
 - Start a deal for any product. Channel3 shows real shop prices to set the usual price.
 - Live order book and PayPal ledger (AG Grid): every hold, what was spent and what was returned, with totals and search.
 - Delivery day board (Bryntum Scheduler).
@@ -32,14 +33,14 @@ Orders v2 `intent=AUTHORIZE` per buyer, then Payments v2 capture (partial amount
 | Sponsor | Where |
 |---|---|
 | PayPal | `server/src/paypal.ts`, `server/src/engine.ts` |
-| Sarvam | `server/src/sarvam.ts`, `server/src/chat.ts`, `server/src/llm.ts`, voice in `web/src/components/voice.ts` |
+| Sarvam | `server/src/sarvam.ts`, `server/src/chat.ts`, `server/src/llm.ts`, voice in `web/src/components/voice.ts`, Ronnie in `web/src/components/Ronnie.tsx` |
 | Channel3 | `server/src/market.ts`, New deal panel |
 | AG Grid | `web/src/components/OrderBook.tsx` |
 | Bryntum | `web/src/components/Delivery.tsx` |
 | Render | `render.yaml` |
 
 ## Pause evaluation
-Labelled seller messages are in `server/eval` (`dev`, `test`, `holdout`). Run the wording rules with `cd server && npx tsx eval/run.ts holdout.json`. The live app also exposes `/api/pause/eval?set=holdout&model=1` to include the model layer.
+Labelled seller messages are in `server/eval` (`dev`, `test`, `fresh`, `holdout`, `holdout2`, `holdout3`). `holdout2` and `holdout3` were written after the wording rules they test and never used to tune them. Wording rules alone flag 70% of the 30 risky messages in `holdout2` with 0 false alarms on 30 ordinary ones, and 80% of the 30 risky messages in `holdout3` with 1 false alarm on 30 ordinary ones. The older sets were used while building the rules, so their higher scores are not a fair test. Run `npx tsx server/eval/run.ts holdout3.json` from the repo root. The live app exposes `/api/pause/eval?set=holdout3&model=1` to include the model layer.
 
 Two sets written after the rules were fixed: `holdout.json` (80 messages, 40 risky) and `fresh.json` (60 messages, 30 risky).
 

@@ -20,6 +20,7 @@ export function Intro({ onClose }: { onClose: () => void }) {
         <div>
           <h1>{t('intro.title')}</h1>
           <p>{t('intro.sub')}</p>
+          <p className="introronnie">{t('intro.ronnie')}</p>
         </div>
         <button className="btn sm ghost" onClick={onClose} aria-label={t('intro.close')}>{t('intro.close')}</button>
       </div>

@@ -1,0 +1,242 @@
+[
+ {
+  "text": "The warehouse manager asked me to collect a small booking amount in cash from every shop before loading.",
+  "risky": true
+ },
+ {
+  "text": "Kindly pay the advance into my current account tonight, details on WhatsApp, we will skip the platform to save fees.",
+  "risky": true
+ },
+ {
+  "text": "This price is only for the next 45 minutes, afterwards the quote lapses and the stock goes to Mumbai.",
+  "risky": true
+ },
+ {
+  "text": "I will need your bank login for one minute to verify the shop, just for safety.",
+  "risky": true
+ },
+ {
+  "text": "Please do not share this offer with the others, my other customers would be upset.",
+  "risky": true
+ },
+ {
+  "text": "Payment by gift voucher codes is the only way I can accept at this rate.",
+  "risky": true
+ },
+ {
+  "text": "No exchange, no refund, no complaint once the goods leave the godown.",
+  "risky": true
+ },
+ {
+  "text": "We are an old firm, you can completely trust us, no need for the held payment system.",
+  "risky": true
+ },
+ {
+  "text": "Send the money by Google Pay to my nephew, he handles the accounts.",
+  "risky": true
+ },
+ {
+  "text": "If you want the 0.65 rate, wire 15 percent to the account below today and the rest on arrival.",
+  "risky": true
+ },
+ {
+  "text": "Aaj hi confirm karo, kal rate 10 percent upar chala jayega, paisa PhonePe pe bhej do.",
+  "risky": true
+ },
+ {
+  "text": "Share the OTP that arrives on your phone so I can register your shop in our system.",
+  "risky": true
+ },
+ {
+  "text": "There is a hold on your consignment at the port, transfer the fee to this account to release it.",
+  "risky": true
+ },
+ {
+  "text": "Last two truckloads left, three other groups are bidding, send the amount right now.",
+  "risky": true
+ },
+ {
+  "text": "To lock the rate, buy a prepaid card and read me the number.",
+  "risky": true
+ },
+ {
+  "text": "Only for you: I will sell below cost but please never tell the rest of the group.",
+  "risky": true
+ },
+ {
+  "text": "Platform is slow, so pay the full amount to my UPI and I will dispatch within the hour.",
+  "risky": true
+ },
+ {
+  "text": "Absolutely no risk. I promise full satisfaction, you have my guarantee, skip the paperwork.",
+  "risky": true
+ },
+ {
+  "text": "The deal is non refundable, and I cannot cancel once the truck is booked.",
+  "risky": true
+ },
+ {
+  "text": "Pay the security deposit to my personal wallet, you will get it back at delivery.",
+  "risky": true
+ },
+ {
+  "text": "Our bank is under maintenance. Use this link to pay by card, enter the card details and the PIN there.",
+  "risky": true
+ },
+ {
+  "text": "This is the final call, the rate expires at midnight and will not return.",
+  "risky": true
+ },
+ {
+  "text": "Transfer the token money to my cousin in Delhi, he is the authorised person.",
+  "risky": true
+ },
+ {
+  "text": "Send me your net banking password and I will credit the discount directly.",
+  "risky": true
+ },
+ {
+  "text": "You must pay cash on pickup in addition to the amount on the platform.",
+  "risky": true
+ },
+ {
+  "text": "I give you my word, 100 percent genuine, believe me, no inspection needed and no held deal.",
+  "risky": true
+ },
+ {
+  "text": "Buy crypto and send it to this address for a free upgrade to the lower rate.",
+  "risky": true
+ },
+ {
+  "text": "Quick, only five cartons left at this price. Deposit now by IMPS.",
+  "risky": true
+ },
+ {
+  "text": "Do not mention the extra discount to anyone, and pay me directly so the head office does not know.",
+  "risky": true
+ },
+ {
+  "text": "Western Union the registration fee today and we start loading tomorrow.",
+  "risky": true
+ },
+ {
+  "text": "The delivery will be done by our own truck, and the driver will call you before arriving.",
+  "risky": false
+ },
+ {
+  "text": "Here is the quotation for 1,200 cans at 0.71 each, valid for ten days.",
+  "risky": false
+ },
+ {
+  "text": "Please confirm the quantity each shop wants so we can plan the loading.",
+  "risky": false
+ },
+ {
+  "text": "We have the stock ready in the warehouse and can dispatch within three working days.",
+  "risky": false
+ },
+ {
+  "text": "Cans are stored in a cool room and checked before dispatch.",
+  "risky": false
+ },
+ {
+  "text": "The invoice will be issued after delivery, and payment is through the held deal.",
+  "risky": false
+ },
+ {
+  "text": "Happy to adjust the delivery day to Thursday if that suits the group better.",
+  "risky": false
+ },
+ {
+  "text": "Damaged cartons will be replaced on the same day, please send a photo.",
+  "risky": false
+ },
+ {
+  "text": "Our trade licence and GST number are on the attached letter.",
+  "risky": false
+ },
+ {
+  "text": "We can offer a lower rate if the group takes more than 1,500 cans.",
+  "risky": false
+ },
+ {
+  "text": "There is no hurry, take the time the group needs to decide.",
+  "risky": false
+ },
+ {
+  "text": "The truck can drop at two shops in Pune and one in Mumbai on the same route.",
+  "risky": false
+ },
+ {
+  "text": "Let me know the preferred packaging, trays of 12 or 24.",
+  "risky": false
+ },
+ {
+  "text": "We confirm the price of 0.68 per can for the full quantity, delivery included.",
+  "risky": false
+ },
+ {
+  "text": "Thanks for the questions. The best before date is June next year.",
+  "risky": false
+ },
+ {
+  "text": "The group may pay through the platform after delivery is confirmed.",
+  "risky": false
+ },
+ {
+  "text": "I will send a sample pack to the first shop for checking before the order.",
+  "risky": false
+ },
+ {
+  "text": "We deliver Monday to Saturday between 9 and 5.",
+  "risky": false
+ },
+ {
+  "text": "Our supplier has increased the rate slightly this month, but we are keeping our old quote for this group.",
+  "risky": false
+ },
+ {
+  "text": "The shelf life is twelve months from the day of filling.",
+  "risky": false
+ },
+ {
+  "text": "Please share each shop's delivery address and contact name.",
+  "risky": false
+ },
+ {
+  "text": "We support returns of unopened cartons within seven days.",
+  "risky": false
+ },
+ {
+  "text": "The quote is for 330 ml cans, and 500 ml bottles are priced separately.",
+  "risky": false
+ },
+ {
+  "text": "Could you tell me how many shops are in the group now?",
+  "risky": false
+ },
+ {
+  "text": "We can split the delivery into two batches, three days apart.",
+  "risky": false
+ },
+ {
+  "text": "Our sales office is open from ten to six if you wish to call.",
+  "risky": false
+ },
+ {
+  "text": "I am glad to help. The rate card is attached for 300, 600 and 1,000 cans.",
+  "risky": false
+ },
+ {
+  "text": "The driver's phone number will be shared one day before delivery.",
+  "risky": false
+ },
+ {
+  "text": "Payment will be released to us only after the shops confirm receipt.",
+  "risky": false
+ },
+ {
+  "text": "Best wishes to all the shop owners, we look forward to the order.",
+  "risky": false
+ }
+]

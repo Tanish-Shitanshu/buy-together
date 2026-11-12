@@ -7,7 +7,7 @@ import * as engine from './engine';
 import { UserError } from './engine';
 import { searchMarket } from './market';
 import { createDeal, store, snapshot, subscribe, commit, resetStore, getDeal, getBuyer, DEAL_ID } from './store';
-import { postMessage, translateStrings, isLang } from './chat';
+import { postMessage, translateStrings, i18nCache, isLang } from './chat';
 import { ask } from './assistant';
 import { storyStep, storyRun, storyBusy } from './story';
 import { verifyWebhook } from './paypal';
@@ -141,6 +141,13 @@ app.post('/api/assistant', wrap(async (req, res) => {
   if (!getDeal(dealId) || typeof text !== 'string') throw new UserError('Bad request');
   res.json(await ask({ dealId, buyerId: String(buyerId), text: text.slice(0, 500), lang: isLang(lang) ? lang : 'en' }));
 }));
+
+app.get('/api/i18n/dump', (req, res) => {
+  const t = process.env.I18N_DUMP_TOKEN;
+  if (!t || req.query.token !== t) { res.status(404).end(); return; }
+  res.setHeader('content-disposition', 'attachment; filename=i18n.json');
+  res.json(i18nCache());
+});
 
 app.post('/api/i18n', wrap(async (req, res) => {
   const { lang, strings } = req.body ?? {};

@@ -23,3 +23,5 @@ services:
         sync: false
       - key: CHANNEL3_API_KEY
         sync: false
+      - key: I18N_DUMP_TOKEN
+        sync: false

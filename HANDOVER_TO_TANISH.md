@@ -96,3 +96,22 @@ Only the build, favicon and eval endpoint were checked live. After the key check
 - **AG Grid dashboard** features were not extended, only restyled. If time allows, extra columns or filters can be added in `OrderBook.tsx` and `Ledger.tsx`.
 - **Submission text rule:** do not mention limitations, roadmaps, build-day plans or AI assistance in README, Devpost or the video script. This handover file is internal; delete it or leave it out when making the repo public if you prefer.
 - **Run locally:** `npm install`, `npm run dev` (works without keys, with simulated holds). Tests: `UNDO_SECONDS=1 npm test`. Build: `npm run build`.
+
+---
+
+## 4. Update after MASTER_PROMPT (Ronnie, translation seed, Pause holdout3)
+
+### Done in code (all pushed)
+- **Ronnie** (`web/src/components/Ronnie.tsx`): original SVG mascot that eases toward the cursor and looks at it. On touch screens, with reduced motion or when pinned, it sits bottom-right and can be dragged. Opens from the mascot or the header button "Ask Ronnie" (Esc closes). Calling its name at the start of a voice message works in Latin, Devanagari, Tamil, Telugu, Gurmukhi, Bengali, Kannada and Gujarati script. Typed messages need no name. The reply language follows the script of what was said (fallback: the app language), shown as text; spoken only if the speaker switch is on or the question was spoken. Stop button, 2 s speech debounce, 300-character cap, friendly error text, offline fallback is the existing English assistant. The old Munim assistant tab is gone (one assistant); Munim stays the negotiating agent. All strings are in `STR` (`ronnie.*`). The Intro card mentions Ronnie.
+- **Translation seed:** `server/seed/i18n.json` (currently `{}`) is merged into the translation cache at start. `GET /api/i18n/dump?token=...` returns the cache when env `I18N_DUMP_TOKEN` is set (404 otherwise). `I18N_DUMP_TOKEN` is in `render.yaml` and `.env.example`.
+- **Pause:** new unseen set `server/eval/holdout3.json`. Rules only, measured once: 80% of risky flagged (24 of 30), 1 false alarm of 30 ordinary. `holdout2`: 70%, 0 false alarms. Not tuned on either. README, Devpost and video script are updated (Ronnie moment at 2:20).
+- Checked locally: Ronnie opens, name is stripped, answer comes back with a "Do it" button, phone layout fine; name and language detection checked for English, Hindi, Tamil, Punjabi; dump route returns 404 without or with a wrong token and the cache with the right one.
+
+### Plug-and-play steps that need a login (in this order, after the last code push)
+1. Render, service `buy-together`, Environment: set `SARVAM_API_KEY` (new account with credits from dashboard.sarvam.ai), `I18N_DUMP_TOKEN` (any long random string you make up), `PAYPAL_*`, `CHANNEL3_API_KEY`. Wait about 2 minutes. `/api/health` must show `"languageService":"ok"`.
+2. Warm up translations: open the live site, switch the language selector one language at a time (hi, ta, te, bn, mr, gu, pa, kn, bgc), waiting until labels are translated before the next.
+3. Open `https://buy-together-v008.onrender.com/api/i18n/dump?token=<your token>`, save the JSON over `server/seed/i18n.json`, commit and push once. Redeploys are then free.
+4. Test Ronnie once on the live site: type a question, speak one (mic), switch speech on, press Stop.
+5. PayPal webhook and sandbox buyer test (section 2.2 and 2.4 above), then Reset demo.
+6. Model Pause run, once: `/api/pause/eval?set=holdout3&model=1` (costs credits). Only quote it if it beats `model=0` (80%).
+7. Before making the repo public: delete `HANDOFF.md`, `HANDOVER_TO_TANISH.md`, `PROGRESS.md` and anything roadmap-like in `PLAN.md`; confirm `.env` and `data/` are not tracked.

@@ -8,7 +8,7 @@ export function useListen(lang: string, speechLang: string, server: boolean) {
   const media = useRef<MediaRecorder | null>(null);
   const supported = typeof window !== 'undefined' && (server ? Boolean(navigator.mediaDevices?.getUserMedia) : Boolean((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition));
 
-  const start = useCallback(async (onText: (t: string, final: boolean) => void) => {
+  const start = useCallback(async (onText: (t: string, final: boolean, lang?: string) => void) => {
     if (server) {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -22,7 +22,7 @@ export function useListen(lang: string, speechLang: string, server: boolean) {
           try {
             const r = await fetch(`/api/stt?lang=${encodeURIComponent(lang)}`, { method: 'POST', headers: { 'content-type': blob.type }, body: blob });
             const j = await r.json();
-            if (r.ok && j.text) onText(j.text, true);
+            if (r.ok && j.text) onText(j.text, true, j.lang);
           } catch { /* ignore */ }
         };
         media.current = mr;

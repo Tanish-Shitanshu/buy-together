@@ -1,4 +1,5 @@
 import { Logo } from './components/Logo';
+import { Ronnie } from './components/Ronnie';
 import { useEffect, useState } from 'react';
 import { post, useAppState } from './api';
 import { useT } from './i18n';
@@ -24,6 +25,7 @@ export function App() {
   const [dealId, setDealId] = useState(() => new URLSearchParams(location.search).get('deal') ?? '');
   const [showNew, setShowNew] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
+  const [ronnieSignal, setRonnieSignal] = useState(0);
 
   // Follow the chosen buyer's language until the user picks one by hand.
   const [manual, setManual] = useState(false);
@@ -50,6 +52,7 @@ export function App() {
         <span className="brand"><Logo />Buy Together</span>
         <span className="tag">{t('app.tag')}</span>
         <span className="sp" />
+        <button className="btn sm ronnie-open" onClick={() => setRonnieSignal(n => n + 1)}>{t('ronnie.open')}</button>
         <span className={`pill${state.config.paypalMode === 'sandbox' ? ' live' : ''}`}>{state.config.paypalMode === 'sandbox' ? t('mode.sandbox') : t('mode.simulated')}</span>
         <label>{t('deal.pick')}
           <select value={deal.id} onChange={e => { setDealId(e.target.value); setShowNew(false); }}>
@@ -91,6 +94,7 @@ export function App() {
           <BottomPanel state={state} deal={deal} />
         </aside>
       </div>
+      <Ronnie state={state} deal={deal} viewAs={viewAs} lang={lang} act={act} openSignal={ronnieSignal} />
       <div className="dock" role="group" aria-label={t('dock.title')}>
         <span className="dockname">{t('dock.title')}</span>
         <span className="dots" aria-hidden>{Array.from({ length: state.storyTotal }, (_, i) => <i key={i} className={i < state.storyStep ? 'on' : ''} />)}</span>

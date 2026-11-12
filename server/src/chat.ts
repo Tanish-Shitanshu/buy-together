@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { config, langName, LANGUAGES } from './config';
+import { config, ROOT, langName, LANGUAGES } from './config';
 import { llmJson } from './llm';
 import { sarvamOn, translateText } from './sarvam';
 import { addMessage, languagesInDeal, store } from './store';
@@ -67,6 +67,12 @@ export async function postMessage(p: {
 const cacheFile = path.join(config.dataDir, 'i18n-cache.json');
 let cache: Record<string, Record<string, string>> = {};
 try { cache = JSON.parse(fs.readFileSync(cacheFile, 'utf8')); } catch { /* none yet */ }
+// Warmed translations shipped with the code, so a redeploy never has to pay for them again.
+try {
+  const seed = JSON.parse(fs.readFileSync(path.join(ROOT, 'server', 'seed', 'i18n.json'), 'utf8')) as Record<string, Record<string, string>>;
+  for (const [lang, map] of Object.entries(seed)) cache[lang] = { ...map, ...(cache[lang] ?? {}) };
+} catch { /* no seed */ }
+export const i18nCache = () => cache;
 const saveCache = () => { try { fs.mkdirSync(config.dataDir, { recursive: true }); fs.writeFileSync(cacheFile, JSON.stringify(cache)); } catch { /* ignore */ } };
 
 export async function translateStrings(lang: LangCode, strings: Record<string, string>, budgetMs = 20000): Promise<Record<string, string>> {
