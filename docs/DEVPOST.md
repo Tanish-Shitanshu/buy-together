@@ -30,7 +30,7 @@ Small shop owners pay shop prices for goods that distributors sell far cheaper i
 Keeping money safe while strangers wait for each other. Holds are separate, capture happens only after every yes and the Undo window, and a final check on every hold runs just before capture.
 
 ## Accomplishments
-Pause catches risky seller messages that rules alone miss. On 140 labelled seller messages written after the rules were fixed, wording rules alone found 56% of risky messages, and adding the model layer raised that to 70% with 2 false alarms on each set of ordinary messages (4 of 70).
+Pause catches risky seller messages before money moves. On two unseen sets of 60 seller messages each, written after the rules were fixed, the wording rules alone flagged 70% and 80% of the risky ones, with 0 and 1 false alarms on the ordinary ones.
 
 ## Built with
 PayPal Orders and Payments APIs, Sarvam, Channel3, AG Grid, Bryntum Scheduler, Render, TypeScript, Node, Express, React, Vite, MCP.

@@ -27,5 +27,3 @@ AI reads, writes and translates. Plain code decides every price and every paymen
 ## Sponsors
 PayPal (core) · Sarvam (languages and voice) · AG Grid (live order book) · Channel3 (shop prices) · Bryntum (delivery board) · Render (hosting).
 
-## Cut order if time runs short
-Bryntum timeline, then Channel3 live call (benchmark stays), then voice. Never cut: holds, Pause, translated chat, the demo video.

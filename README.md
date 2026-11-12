@@ -2,7 +2,7 @@
 
 Strangers pool their orders to reach a bulk price. Munim, the group's agent, negotiates for everyone. PayPal holds each buyer's share separately, and money moves only when every buyer has said yes.
 
-Live demo: https://buy-together-v008.onrender.com
+Live demo: https://buy-together-scx9.onrender.com
 
 ## How a deal works
 1. A buyer joins with a quantity and the highest price they accept. PayPal authorizes that amount for the buyer alone. Nothing is spent.

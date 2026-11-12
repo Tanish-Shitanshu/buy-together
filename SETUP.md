@@ -35,7 +35,7 @@ Without keys it still runs with simulated holds and English only.
 The live site already shows PayPal sandbox mode with working keys. If you use your own:
 1. https://developer.paypal.com/dashboard/applications/sandbox, create an app (Merchant). Copy Client ID and Secret key 1.
 2. `.env` and Render: `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_ENV=sandbox`.
-3. Webhook: in the same app, Webhooks, add `https://buy-together-v008.onrender.com/api/paypal/webhook`, pick authorization and capture events plus checkout order approved. Copy the Webhook ID into Render as `PAYPAL_WEBHOOK_ID`.
+3. Webhook: in the same app, Webhooks, add `https://buy-together-scx9.onrender.com/api/paypal/webhook`, pick authorization and capture events plus checkout order approved. Copy the Webhook ID into Render as `PAYPAL_WEBHOOK_ID`.
 4. Buyer test (once): https://developer.paypal.com/dashboard/accounts, open a US Personal sandbox account (View/Edit shows its email and password). On the live site click Reset demo, view as Ravi, Hold and join, log in with that account in the pop-up, then run the story to the end. In the sandbox business account check there is an authorization, a partial capture of the exact share, and the rest released. Click Reset demo when done.
 
 ## 3. Channel3 (shop prices)
@@ -48,7 +48,7 @@ Live site already returns prices. To use your own: https://trychannel3.com/sign-
 
 ## 5. Final checks
 ```bash
-npm run verify:live -- https://buy-together-v008.onrender.com
+npm run verify:live -- https://buy-together-scx9.onrender.com
 ```
 All lines must say OK. Then click through the live site once (desktop and phone): Reset, join, chat, Munim, Pause blocks FastBulk, helper link, delivery drag, receipt, order book, ledger, new deal, Ronnie (type, mic, speaker on and off, Stop). Optional, costs credits, run once: `/api/pause/eval?set=holdout3&model=1` (quote a model number only if it beats `model=0`, which is 80%).
 

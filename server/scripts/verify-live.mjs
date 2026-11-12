@@ -1,5 +1,5 @@
 // Checks the live site end to end without spending credits. Run: npm run verify:live -- https://your-site.onrender.com
-const base = (process.argv[2] ?? 'https://buy-together-v008.onrender.com').replace(/\/$/, '');
+const base = (process.argv[2] ?? 'https://buy-together-scx9.onrender.com').replace(/\/$/, '');
 let failed = 0;
 const check = async (name, fn) => {
   try { const m = await fn(); console.log(`  OK    ${name}${m ? ` (${m})` : ''}`); }
