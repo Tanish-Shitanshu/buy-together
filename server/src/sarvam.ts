@@ -10,23 +10,32 @@ export async function translateText(text: string, from: string, to: string): Pro
   const src = SARVAM_CODE[from] ?? from;
   const tgt = SARVAM_CODE[to] ?? to;
   if (src === tgt) return text;
-  try {
-    const r = await fetch(`${BASE}/translate`, {
-      method: 'POST',
-      headers: { ...key(), 'content-type': 'application/json' },
-      body: JSON.stringify({
-        input: text.slice(0, 1000), source_language_code: src, target_language_code: tgt,
-        model: 'mayura:v1', mode: 'modern-colloquial', numerals_format: 'international',
-      }),
-      signal: AbortSignal.timeout(15000),
-    });
-    if (!r.ok) throw new Error(`${r.status} ${(await r.text()).slice(0, 160)}`);
-    const j: any = await r.json();
-    return typeof j.translated_text === 'string' && j.translated_text.trim() ? j.translated_text.trim() : null;
-  } catch (e) {
-    console.warn('[sarvam] translate failed', (e as Error).message);
-    return null;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    try {
+      const r = await fetch(`${BASE}/translate`, {
+        method: 'POST',
+        headers: { ...key(), 'content-type': 'application/json' },
+        body: JSON.stringify({
+          input: text.slice(0, 1000), source_language_code: src, target_language_code: tgt,
+          model: 'mayura:v1', mode: 'modern-colloquial', numerals_format: 'international',
+        }),
+        signal: AbortSignal.timeout(15000),
+      });
+      if (r.status === 429 || r.status >= 500) {
+        // Busy: wait a little longer each time, then try again.
+        const wait = Number(r.headers.get('retry-after')) * 1000 || 700 * (attempt + 1) + Math.random() * 400;
+        await new Promise(res => setTimeout(res, Math.min(wait, 4000)));
+        continue;
+      }
+      if (!r.ok) throw new Error(`${r.status} ${(await r.text()).slice(0, 160)}`);
+      const j: any = await r.json();
+      return typeof j.translated_text === 'string' && j.translated_text.trim() ? j.translated_text.trim() : null;
+    } catch (e) {
+      if (attempt === 3) { console.warn('[sarvam] translate failed', (e as Error).message); return null; }
+      await new Promise(res => setTimeout(res, 500 * (attempt + 1)));
+    }
   }
+  return null;
 }
 
 /** Speech to text (Saaras). `lang` is one of our codes; audio is whatever the browser recorded. */

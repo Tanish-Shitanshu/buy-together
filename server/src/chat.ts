@@ -89,7 +89,7 @@ export async function translateStrings(lang: LangCode, strings: Record<string, s
         if (ok) have[`${k}|${v}`] = back;
       }
     };
-    await Promise.all(Array.from({ length: 8 }, worker));
+    await Promise.all(Array.from({ length: 4 }, worker));
     if (missing.length) saveCache();
     const res: Record<string, string> = {};
     for (const [k, v] of Object.entries(strings)) res[k] = have[`${k}|${v}`] ?? v;
