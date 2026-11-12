@@ -1,8 +1,55 @@
-# Buy Together
+<p align="center"><img src="docs/img/thumbnail.jpg" alt="Buy Together: group buying where nobody has to trust anyone" width="100%"></p>
 
-Strangers pool their orders to reach a bulk price. Munim, the group's agent, negotiates for everyone. PayPal holds each buyer's share separately, and money moves only when every buyer has said yes.
+# Buy Together: Safe Group Buying with PayPal
+**Group buying where nobody has to trust anyone.** Shops pool one order to reach a wholesale price. PayPal holds each buyer's money separately, an AI agent negotiates inside every buyer's limit, and a scam check reads every offer before money moves.
 
-Live demo: https://buy-together-scx9.onrender.com
+Built by Tanish Shitanshu, Mohit and Aarnav for the **PayPal AI Hackathon**.
+
+| | |
+|---|---|
+| Live demo | https://buy-together-scx9.onrender.com/ |
+| Demo video (2:51) | YOUTUBE_LINK_HERE |
+| Code | https://github.com/Tanish-Shitanshu/buy-together (MIT) |
+| Devpost | https://devpost.com/submit-to/31302-paypal-ai-hackathon/ |
+
+## Try it in 30 seconds
+1. Open the live demo. No login is needed.
+2. Click **Next step** in the bottom bar to walk through Pool, Protect and Pay, or **Play whole demo** for the full run.
+3. Click **Ask Ronnie** to ask about the deal by typing or voice, and use the **Language** menu to switch language.
+
+## The problem
+A shopkeeper pays $0.95 for a can that costs $0.70 in bulk. Pooling would fix it, but pooling means sending money to strangers, and India lost about ₹19,813 crore to cyber fraud in 2025 (I4C). About 13 million kirana shops keep overpaying. Buy Together removes the need to trust anyone.
+
+## Where we score: the judging criteria
+| Criterion | What we did and where to see it |
+|---|---|
+| **Technological implementation** | PayPal Orders v2 `AUTHORIZE` per buyer, partial capture for each exact share, void for the rest, signed webhooks and a pre-flight check (`server/src/paypal.ts`, `server/src/engine.ts`). AI reads, writes and translates while plain code decides every price and limit. Scam check measured on unseen messages (see Pause evaluation). Live on Render with an MCP server. |
+| **Design** | One screen for the whole deal: live price ladder, group chat in each reader's language, scam check, order book and delivery board. Ten languages, voice assistant Ronnie, family helper approval and an undo window. See the screenshots below. |
+| **Potential impact** | About 13 million kirana shops in India overpay because pooling is unsafe. In our demo, 1,530 cans came to $0.64 against a $1.05 market price, saving $627.30. The same flow works for any group buy. |
+| **Quality of the idea** | Pooled buying where no pooled wallet ever exists: every buyer's money stays in their own PayPal account until they approve. Agents negotiate, but only a human approves money. |
+| **Presentation** | A 2:51 video with the real product and a spoken Hindi answer from Ronnie, this README, and a one-click demo. |
+
+## Screenshots
+| | |
+|---|---|
+| ![Home](docs/img/shot-01.jpg) | ![Price falls](docs/img/shot-02.jpg) |
+| ![Join with a hold](docs/img/shot-03.jpg) | ![PayPal approval](docs/img/shot-04.jpg) |
+| ![Pause blocks a scam offer](docs/img/shot-05.jpg) | ![Pause evaluation](docs/img/shot-06.jpg) |
+| ![Exact shares](docs/img/shot-07.jpg) | ![Undo window](docs/img/shot-08.jpg) |
+| ![Saved together](docs/img/shot-09.jpg) | ![PayPal ledger](docs/img/shot-10.jpg) |
+| ![Delivery board](docs/img/shot-11.jpg) | ![Ronnie](docs/img/shot-12.jpg) |
+| ![Tamil](docs/img/shot-13.jpg) | ![Stack](docs/img/shot-14.jpg) |
+| ![Principle](docs/img/shot-15.jpg) | |
+
+## Where each tool is used
+| Tool | What it does in Buy Together |
+|---|---|
+| **PayPal** (required) | Separate authorized hold per buyer, partial capture, void, webhooks (sandbox) |
+| **Sarvam AI** (AI) | sarvam-105b for Munim and Ronnie, Mayura translation, Saaras speech to text, Bulbul voice, 10 Indian languages |
+| **Channel3** | Real shop prices when starting a new deal |
+| **Bryntum Scheduler** | Delivery day board: one truck, one stop per shop |
+| **AG Grid** | Live order book and PayPal ledger (Held, Spent, Returned) |
+| **Render** | Hosts the live demo (`render.yaml`) |
 
 ## How a deal works
 1. A buyer joins with a quantity and the highest price they accept. PayPal authorizes that amount for the buyer alone. Nothing is spent.
