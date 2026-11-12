@@ -156,7 +156,7 @@ app.post('/api/pause/check-message', wrap(async (req, res) => {
 
 /** Scores Pause's message check on the labelled sets in server/eval. `model=1` adds the model's pointers. */
 app.get('/api/pause/eval', wrap(async (req, res) => {
-  const set = String(req.query.set ?? 'holdout').replace(/[^a-z]/g, '');
+  const set = String(req.query.set ?? 'holdout').replace(/[^a-z0-9]/g, '');
   const useModel = req.query.model === '1';
   const rows: { text: string; risky: boolean }[] = JSON.parse(fs.readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname), '..', 'eval', `${set}.json`), 'utf8'));
   const verdicts: ('pass' | 'warn' | 'fail')[] = new Array(rows.length);

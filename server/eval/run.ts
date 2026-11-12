@@ -1,7 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { pressureSpans, messageVerdict } from '../src/pause';
-const here = path.dirname(new URL(import.meta.url).pathname);
+const here = path.dirname(fileURLToPath(import.meta.url));
 
 /** Scores Pause's message check. A message counts as "flagged" when at least one kind of pressure wording is found,
  *  and as "blocked" when the app's rule fails it (money outside the held deal, card or login details, or two kinds of pressure). */

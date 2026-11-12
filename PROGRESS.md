@@ -49,3 +49,11 @@ Read `HANDOFF.md` and paste its prompt. Priorities:
 - New theme layer in `web/src/styles.css` (bottom of the file): PayPal navy/blue palette, Inter, white cards with soft shadows, pill buttons, status badges instead of rotated stamps, clean AG Grid theme variables, single-row header and demo dock, phone layout.
 - Checked locally with the full 5-step demo (simulated PayPal) at 1440px and 375px: join, negotiation, Pause block, undo window, pay, delivery board, order book, ledger, receipt all render. No horizontal overflow at phone width.
 - Still needs a human: real PayPal buyer pop-up, Render env vars, video, Devpost submit. Pause model eval was not re-run (no keys locally).
+
+## Update (teammate session 3)
+- New logo (two overlapping circles, blue to navy tile), favicon and theme colour.
+- Pause rules extended (cash, IMPS/NEFT, prepaid, handling or release charges, banking username, "platform chodo", no-returns wording, secrecy, "whoever pays first"). The old `holdout` set was seen while doing this, so it is no longer a fair test. New unseen set `server/eval/holdout2.json` (60 messages): rules flag 70% of risky, 0 false alarms of 30. Do not tune on it. `/api/pause/eval?set=holdout2` works.
+- Live eval with `model=1` returned the same numbers as rules only, so the model layer is probably not answering on Render (check `SARVAM_API_KEY` there). Do not quote a model-assisted figure until `model=1` beats `model=0`.
+- `server/eval/run.ts` now works on Windows.
+- Checked at 1280px and 375px in all ten UI languages: no horizontal overflow. Phone header is a two-column grid; demo dock is one compact row.
+- Local API checks: Pause check-message, `/mcp` tools/list, state. Market search returns empty without `CHANNEL3_API_KEY` (expected).

@@ -1,3 +1,4 @@
+import { Logo } from './components/Logo';
 import { useEffect, useState } from 'react';
 import { post, useAppState } from './api';
 import { useT } from './i18n';
@@ -38,7 +39,7 @@ export function App() {
   };
   const director = async (fn: () => Promise<unknown>) => { setBusy(true); await act(fn); setBusy(false); };
 
-  if (!state) return <div className="app"><div className="bar"><span className="brand">Buy Together</span><span className="tag">{online ? '…' : 'Connecting'}</span></div></div>;
+  if (!state) return <div className="app"><div className="bar"><span className="brand"><Logo />Buy Together</span><span className="tag">{online ? '…' : 'Connecting'}</span></div></div>;
   const helperId = new URLSearchParams(location.search).get('helper');
   if (helperId) return <HelperView state={state} commitmentId={helperId} />;
   const deal = state.deals.find(d => d.id === dealId) ?? state.deals[0];
@@ -46,7 +47,7 @@ export function App() {
   return (
     <div className="app">
       <header className="bar">
-        <span className="brand"><i><b style={{ background: '#E8590C' }} /><b style={{ background: '#1C7C7D' }} /><b style={{ background: '#4C4BC4' }} /></i>Buy Together</span>
+        <span className="brand"><Logo />Buy Together</span>
         <span className="tag">{t('app.tag')}</span>
         <span className="sp" />
         <span className={`pill${state.config.paypalMode === 'sandbox' ? ' live' : ''}`}>{state.config.paypalMode === 'sandbox' ? t('mode.sandbox') : t('mode.simulated')}</span>
