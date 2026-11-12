@@ -8,9 +8,11 @@ Built by Tanish Shitanshu, Mohit and Aarnav for the **PayPal AI Hackathon**.
 | | |
 |---|---|
 | Live demo | https://buy-together-scx9.onrender.com/ |
-| Demo video (2:51) | YOUTUBE_LINK_HERE |
+| Demo video (2:51) | https://www.youtube.com/watch?v=r-yyblfiQ7g |
 | Code | https://github.com/Tanish-Shitanshu/buy-together (MIT) |
 | Devpost | https://devpost.com/submit-to/31302-paypal-ai-hackathon/ |
+
+[▶ Watch the 2:51 demo video](https://www.youtube.com/watch?v=r-yyblfiQ7g) · [Open the live app](https://buy-together-scx9.onrender.com/) · [Source code](https://github.com/Tanish-Shitanshu/buy-together)
 
 ## Try it in 30 seconds
 1. Open the live demo. No login is needed.
