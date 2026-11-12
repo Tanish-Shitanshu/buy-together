@@ -385,3 +385,34 @@ label.f { font-weight: 600; color: var(--ink-2); }
 .bar label { white-space: nowrap; }
 .brand { white-space: nowrap; } .bar .tag { display: none; } .bar .pill { white-space: nowrap; }
 @media (min-width: 1400px) { .bar .tag { display: inline; } }
+
+/* status badges instead of rubber stamps, PayPal-style pills */
+.stamp { transform: none; border: 0; border-radius: 99px; padding: 3px 11px; margin: 0 2px; font-size: 11.5px; font-weight: 700; letter-spacing: .02em; text-transform: none; background: color-mix(in srgb, currentColor 12%, #fff); animation: badge .3s var(--ease) both; line-height: 1.5; }
+.stamp::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: currentColor; margin-right: 6px; vertical-align: 1px; }
+@keyframes badge { from { transform: scale(.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.stamp.paid, .stamp.agreed, .stamp.yes { color: #14692C; } .stamp.returned { color: #5F6B7E; } .stamp.waiting { color: #8A5A00; } .stamp.blocked { color: #B42318; } .stamp.live { color: #0B6E72; }
+.stamp.paid, .stamp.agreed { animation: badge .3s var(--ease) both; }
+
+/* data grids: clean, white, light rules */
+.ag-theme-quartz {
+  --ag-font-family: var(--body); --ag-font-size: 14px; --ag-foreground-color: var(--ink); --ag-background-color: #fff;
+  --ag-header-background-color: #F5F7FA; --ag-header-foreground-color: #3F4B5E; --ag-header-column-resize-handle-display: none;
+  --ag-border-color: #E3E8EF; --ag-row-border-color: #EDF0F5; --ag-row-hover-color: #F2F8FF; --ag-odd-row-background-color: #fff;
+  --ag-wrapper-border-radius: 14px; --ag-cell-horizontal-padding: 14px; --ag-selected-row-background-color: #E8F1FD;
+  --ag-input-focus-border-color: var(--pp-blue); --ag-active-color: var(--pp-blue);
+}
+.ag-theme-quartz .ag-header-cell-label { font-weight: 700; font-size: 12.5px; letter-spacing: .01em; }
+.ag-theme-quartz .ag-cell { display: flex; align-items: center; }
+.ag-theme-quartz .ag-cell .stamp { margin: 0; }
+.totalrow { background: #F5F7FA; color: var(--pp-navy); }
+.delivery .schedhost { border-radius: 14px; border-color: var(--line); }
+.found-row { border-top: 1px solid #EDF0F5; padding: 10px 0; }
+.found-row img, .found-row .ph { border-radius: 10px; }
+.helper .card { margin-top: 12px; }
+.err { background: #FEF3F2; color: #B42318; border: 1px solid #F9D2CF; border-left: 4px solid #D92D20; }
+.warnrow { background: #FEF3F2; border-color: #F9D2CF; border-radius: 12px; }
+.empty { background: #F8FAFD; }
+.msg { background: #F5F7FA; border-radius: 10px; }
+.receipt .save { color: #14692C; }
+.card h2 .muted { font-weight: 500; }
+@media (max-width: 640px) { .tick span { display: none; } .trackwrap { margin-top: 16px; } .tick { top: 0; } }

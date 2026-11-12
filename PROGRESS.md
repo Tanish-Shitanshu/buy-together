@@ -44,3 +44,8 @@ Read `HANDOFF.md` and paste its prompt. Priorities:
 - Pause model prompt: two more worked examples (Hinglish pressure plus off-platform payment, and a no-returns case). Rules are unchanged, so the published eval numbers still apply; the model run was not repeated because no API keys are set up locally.
 - Not done: live-site walkthrough, real PayPal buyer pop-up, re-run of `/api/pause/eval` on the live site, Sarvam language checks. All need keys or a browser session.
 - Known: `server/eval/run.ts` builds the file path wrongly on Windows (run it from WSL or Linux).
+
+## Update (teammate session 2): PayPal-style UI
+- New theme layer in `web/src/styles.css` (bottom of the file): PayPal navy/blue palette, Inter, white cards with soft shadows, pill buttons, status badges instead of rotated stamps, clean AG Grid theme variables, single-row header and demo dock, phone layout.
+- Checked locally with the full 5-step demo (simulated PayPal) at 1440px and 375px: join, negotiation, Pause block, undo window, pay, delivery board, order book, ledger, receipt all render. No horizontal overflow at phone width.
+- Still needs a human: real PayPal buyer pop-up, Render env vars, video, Devpost submit. Pause model eval was not re-run (no keys locally).
