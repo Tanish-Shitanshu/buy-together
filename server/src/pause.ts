@@ -44,6 +44,10 @@ Message: "Pay a clearance fee on this link first, otherwise the shipment is retu
 {"flags":[{"kind":"Pays outside the held deal","phrase":"Pay a clearance fee on this link first"},{"kind":"No way back","phrase":"it is sold as is"}]}
 Message: "Read me the code that arrives by SMS so I can confirm you. You can rely on me completely."
 {"flags":[{"kind":"Asks for card or login details","phrase":"Read me the code that arrives by SMS"},{"kind":"Empty assurance","phrase":"You can rely on me completely"}]}
+Message: "Kal tak confirm karo warna rate badh jayega, aur paisa mere bhai ke number pe bhej do, wapas nahi milega."
+{"flags":[{"kind":"Time pressure","phrase":"Kal tak confirm karo warna rate badh jayega"},{"kind":"Pays outside the held deal","phrase":"paisa mere bhai ke number pe bhej do"},{"kind":"No way back","phrase":"wapas nahi milega"}]}
+Message: "Only the first five buyers get this rate, so decide quickly. No returns once the cartons are packed."
+{"flags":[{"kind":"Time pressure","phrase":"decide quickly"},{"kind":"No way back","phrase":"No returns once the cartons are packed"}]}
 Message: "We can deliver 600 cans in six days at the quoted rate. Payment is through the held deal, so nothing is due before delivery."
 {"flags":[]}
 Reply with JSON only: {"flags":[{"kind":"<one kind from the list>","phrase":"<exact words copied from the message>"}]}. Normal messages about delivery, price, quantity, quality or deadlines for delivery are not flags; reply {"flags":[]}. Never invent words.`,

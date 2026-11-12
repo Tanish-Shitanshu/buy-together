@@ -26,7 +26,7 @@ export function Hero({ state, deal }: { state: AppState; deal: Deal }) {
       <div className="hero-top">
         <div>
           <div className="muted" style={{ fontWeight: 600 }}>{deal.title}</div>
-          <div className="num price-big">{total ? usd(price) : usd(deal.tiers[0].unitPrice)}<small>{t('hero.price')}</small></div>
+          <div className="num price-big" key={price} aria-live="polite">{total ? usd(price) : usd(deal.tiers[0].unitPrice)}<small>{t('hero.price')}</small></div>
         </div>
         <div className="hero-meta">
           <div className="big">{t('hero.together', { n: num(total), u: unitS })}</div>

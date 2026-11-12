@@ -38,3 +38,9 @@ Read `HANDOFF.md` and paste its prompt. Priorities:
 3. Improve Pause recall (add examples to the model prompt in `server/src/pause.ts`, extend `server/eval`, keep a held-out set untouched, re-run `/api/pause/eval`).
 4. Strengthen the AG Grid dashboard if time allows.
 5. Keep README, PLAN and docs matching what the product really does.
+
+## Update (teammate session 1)
+- UI polish layer appended to `web/src/styles.css`: higher-contrast muted text, focus rings, hover lift, price pop on tier change, paid/agreed stamp glow, empty/error states, phone-width layout (under 640px), high-contrast mode.
+- Pause model prompt: two more worked examples (Hinglish pressure plus off-platform payment, and a no-returns case). Rules are unchanged, so the published eval numbers still apply; the model run was not repeated because no API keys are set up locally.
+- Not done: live-site walkthrough, real PayPal buyer pop-up, re-run of `/api/pause/eval` on the live site, Sarvam language checks. All need keys or a browser session.
+- Known: `server/eval/run.ts` builds the file path wrongly on Windows (run it from WSL or Linux).
